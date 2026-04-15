@@ -3,11 +3,9 @@ package ru.kashtanov.user_service.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.kashtanov.user_service.dto.request.RequestUserDto;
+import ru.kashtanov.user_service.dto.response.ResponseDetailedUserDto;
 import ru.kashtanov.user_service.dto.response.ResponseSavedUserDto;
 
 import ru.kashtanov.user_service.service.impl.UserServiceImpl;
@@ -27,8 +25,15 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ResponseSavedUserDto> addUser(@RequestBody RequestUserDto dto) {
-        System.out.println("Achieved adding user");
+        System.out.println("Achieved - addUser ");
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(dto));
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponseDetailedUserDto> getUserById(@PathVariable Long userId) {
+        System.out.println("Achieved -  getUserById ");
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findUserById(userId));
+    }
+
 
 }

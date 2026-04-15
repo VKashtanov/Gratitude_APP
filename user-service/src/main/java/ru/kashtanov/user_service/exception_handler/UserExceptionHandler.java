@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.kashtanov.user_service.dto.response.ErrorResponse;
 import ru.kashtanov.user_service.exception.ImpossibleSaveUserException;
+import ru.kashtanov.user_service.exception.UserNotFoundException;
 
 import java.time.LocalDateTime;
 
@@ -16,10 +17,27 @@ import java.time.LocalDateTime;
 public class UserExceptionHandler {
 
     @ExceptionHandler(ImpossibleSaveUserException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(ImpossibleSaveUserException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
+    public ResponseEntity<ErrorResponse> impossibleSaveUser(ImpossibleSaveUserException ex) {
+        HttpStatus status = HttpStatus.CONFLICT;//409
+        return ResponseEntity.status(status)
                 .body(ErrorResponse.builder()
                         .timestamp(LocalDateTime.now())
-                        .message(ex.getMessage()).build());
+                        .status(status.value())
+                        .error("Impossible save user")
+                        .message(ex.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
+        HttpStatus status = HttpStatus.NOT_FOUND;//404
+        return ResponseEntity
+                .status(status)
+                .body(ErrorResponse.builder()
+                        .timestamp(LocalDateTime.now())
+                        .status(status.value())
+                        .error("Not Found")
+                        .message(ex.getMessage())
+                        .build());
     }
 }
