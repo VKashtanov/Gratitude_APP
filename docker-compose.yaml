@@ -1,0 +1,21 @@
+services:
+    postgres:
+      image: postgres:15
+      container_name: postgres
+      ports:
+        - "5400:5432"
+      env_file:
+        - .env
+      volumes:
+        - C:\opt\postgres_data:/var/lib/postgresql/data
+      restart: unless-stopped
+
+
+    redis:
+      image: redis:8.2.5
+      container_name: just-fire-redis
+      ports:
+        - "6300:6379"
+      command: redis-server --requirepass ${REDIS_PASSWORD}
+      # environment не нужен, переменная берется из .env
+      restart: unless-stopped
