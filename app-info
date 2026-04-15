@@ -1,0 +1,5 @@
+Gratitude (id, authorId, content, timestamp)
+GratitudeRecipient (id, gratitudeId, userId)
+GratitudeLike (id, gratitudeId, userId, timestamp)
+Like (id, userId, entityType, entityId, timestamp)
+ser (id, firstName, middleName, lastName, email, position.. so on..
