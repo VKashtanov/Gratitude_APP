@@ -1,8 +1,8 @@
 package ru.kashtanov.user_service.util;
 
 import ru.kashtanov.user_service.dto.request.RequestUserDto;
-import ru.kashtanov.user_service.dto.response.ResponseDetailedUserDto;
-import ru.kashtanov.user_service.dto.response.ResponseSavedUserDto;
+import ru.kashtanov.user_service.dto.response.UserDtoResponseDetailed;
+import ru.kashtanov.user_service.dto.response.UserDtoResponseSaved;
 import ru.kashtanov.user_service.model.User;
 
 /**
@@ -27,8 +27,8 @@ public class UtilWorker {
         return user;
     }
 
-    public ResponseSavedUserDto transformToRequestUserDto(User user) {
-        var dto = new ResponseSavedUserDto();
+    public UserDtoResponseSaved transformToRequestUserDto(User user) {
+        var dto = new UserDtoResponseSaved();
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
@@ -37,10 +37,8 @@ public class UtilWorker {
     }
 
 
-    //ResponseDetailedUserDto
-
-    public ResponseDetailedUserDto transformToResponseDetailedUserDto(User user) {
-        var dto = new ResponseDetailedUserDto();
+    public UserDtoResponseDetailed transformToResponseDetailedUserDto(User user) {
+        var dto = new UserDtoResponseDetailed();
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());

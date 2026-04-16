@@ -40,4 +40,16 @@ public class UserExceptionHandler {
                         .message(ex.getMessage())
                         .build());
     }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleUserFieldNotFound(IllegalArgumentException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;//400
+        return ResponseEntity
+                .status(status)
+                .body(ErrorResponse.builder()
+                        .timestamp(LocalDateTime.now())
+                        .status(status.value())
+                        .error("Bad Request")
+                        .message(ex.getMessage())
+                        .build());
+    }
 }

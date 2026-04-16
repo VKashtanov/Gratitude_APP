@@ -6,7 +6,7 @@ import lombok.Data;
  * @author Viktor Кashtanov
  */
 @Data
-public class ResponseDetailedUserDto {
+public class UserDtoResponseDetailed {
     private Long id;
     private String firstName;
     private String middleName;
