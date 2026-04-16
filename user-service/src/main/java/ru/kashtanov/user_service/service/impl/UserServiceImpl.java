@@ -1,7 +1,10 @@
 package ru.kashtanov.user_service.service.impl;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.kashtanov.user_service.dto.request.RequestUserDto;
+import ru.kashtanov.user_service.dto.response.UserDeletedResponseDto;
 import ru.kashtanov.user_service.dto.response.UserDtoFieldsUpdatedResponse;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseDetailed;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseSaved;
@@ -9,8 +12,9 @@ import ru.kashtanov.user_service.exception.ImpossibleSaveUserException;
 import ru.kashtanov.user_service.exception.UserNotFoundException;
 import ru.kashtanov.user_service.model.User;
 import ru.kashtanov.user_service.repository.UserRepo;
-import ru.kashtanov.user_service.util.UtilWorker;
+import ru.kashtanov.user_service.util.UserUtilService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,7 +23,7 @@ import java.util.Map;
 //TODO to implement UserService
 @Service
 public class UserServiceImpl {
-    private final UtilWorker utilWorker = new UtilWorker();
+    private final UserUtilService utilService = new UserUtilService();
     private final UserRepo userRepo;
 
     public UserServiceImpl(UserRepo userRepo) {
@@ -28,9 +32,9 @@ public class UserServiceImpl {
 
     public UserDtoResponseSaved createUser(RequestUserDto dto) {
         try {
-            User user = utilWorker.transformToUser(dto);
+            User user = utilService.transformToUser(dto);
             User savedUser = userRepo.save(user);
-            return utilWorker.transformToRequestUserDto(savedUser);
+            return utilService.transformToRequestUserDto(savedUser);
         } catch (Exception e) {
             throw new ImpossibleSaveUserException("Impossible save user because of an exception: " + e.getMessage());
         }
@@ -38,67 +42,29 @@ public class UserServiceImpl {
 
     public UserDtoResponseDetailed findUserById(Long id) {
         User user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("User with id:" + id + " is not found"));
-        return utilWorker.transformToResponseDetailedUserDto(user);
+        return utilService.transformToResponseDetailedUserDto(user);
     }
 
-    public UserDtoFieldsUpdatedResponse updateUserById(Long id, Map<String, Object> userDetails) {
+
+    public UserDtoFieldsUpdatedResponse updateUserById(Long id, Map<String, Object> userDetails) throws IllegalArgumentException {
         User user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("User with id:" + id + " is not found"));
-        var updatedDto = new UserDtoFieldsUpdatedResponse();
-        for (Map.Entry<String, Object> entry : userDetails.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            switch (key) {
-                case "firstname":
-                    user.setFirstName((String) value);
-                    updatedDto.getUpdatedFields().put("firstname", value);
-                    break;
-                case "middlename":
-                    user.setMiddleName((String) value);
-                    updatedDto.getUpdatedFields().put("middlename", value);
-                    break;
-                case "lastname":
-                    user.setLastName((String) value);
-                    updatedDto.getUpdatedFields().put("lastname", value);
-                    break;
-                case "position":
-                    user.setPosition((String) value);
-                    updatedDto.getUpdatedFields().put("position", value);
-                    break;
-                case "portrait_url":
-                    user.setPortraitUrl((String) value);
-                    updatedDto.getUpdatedFields().put("portrait_url", value);
-                    break;
-                case "email":
-                    user.setEmail((String) value);
-                    updatedDto.getUpdatedFields().put("email", value);
-                    break;
-                case "phone":
-                    user.setPhone((String) value);
-                    updatedDto.getUpdatedFields().put("phone", value);
-                    break;
-                case "address":
-                    user.setAddress((String) value);
-                    updatedDto.getUpdatedFields().put("address", value);
-                    break;
-                case "city":
-                    user.setCity((String) value);
-                    updatedDto.getUpdatedFields().put("city", value);
-                    break;
-                case "state":
-                    user.setState((String) value);
-                    updatedDto.getUpdatedFields().put("state", value);
-                    break;
-                case "country":
-                    user.setCountry((String) value);
-                    updatedDto.getUpdatedFields().put("country", value);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown user field: " + key);
-            }
-        }
+        var updatedFields = utilService.updateUserFields(userDetails, user);
         userRepo.save(user);
-        return updatedDto;
+        return updatedFields;
     }
+
+    public UserDeletedResponseDto deleteUserById(Long id) {
+        User user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("User with id:" + id + " is not found"));
+        var deletedUser = utilService.transformToUserDeletedResponseDto(user);
+        userRepo.deleteById(id);
+        return deletedUser;
+    }
+
+    public List<UserDtoResponseDetailed> findAllUsers(Pageable pageable) {
+        List<User> users = userRepo.findAll(pageable).toList();
+        return users.stream().map(utilService::transformToResponseDetailedUserDto).toList();
+    }
+
 
 
 }
