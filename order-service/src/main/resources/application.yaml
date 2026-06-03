@@ -1,0 +1,30 @@
+server:
+  port:8050
+spring:
+  application:
+    name: order-service
+
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      # key - serializer turns KEY -msgs to bytes for sending . For Kafka understand how to work with the message
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # value - turns value Java object into Json
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        #        do not add headers of class type
+        spring.json.add.type.headers: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5400/${GA_MY_POSTGRES_DB}
+    username: ${GA_MY_POSTGRES_USER}
+    password: ${GA_MY_POSTGRES_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect

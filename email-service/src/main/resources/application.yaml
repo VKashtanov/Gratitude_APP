@@ -1,9 +1,9 @@
 server:
-  port: 9050
+  port: 4050
 
 spring:
   application:
-    name: notification-service
+    name: email-service
   kafka:
     bootstrap-servers: localhost:9092  # address where Kafka is run
     template:
@@ -11,6 +11,7 @@ spring:
     consumer:
       group-id: "notificationId"
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
-        spring.json.type.mapping: "event:ru.kashtanov.notification_service.event.OrderPlacedEvent"
+        spring.json.type.mapping: "ru.kashtanov.order_service.dto.OrderPlacedEvent:ru.kashtanov.notification_service.dto.OrderPlacedEvent"
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
