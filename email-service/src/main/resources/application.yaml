@@ -1,0 +1,16 @@
+server:
+  port: 9050
+
+spring:
+  application:
+    name: notification-service
+  kafka:
+    bootstrap-servers: localhost:9092  # address where Kafka is run
+    template:
+      default-topic: "notification_topic"
+    consumer:
+      group-id: "notificationId"
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.type.mapping: "event:ru.kashtanov.notification_service.event.OrderPlacedEvent"
