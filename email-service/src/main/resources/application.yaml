@@ -4,12 +4,30 @@ server:
 spring:
   application:
     name: email-service
+
+
+  datasource:
+    url: jdbc:postgresql://localhost:5400/emails_db
+    username: ${GA_MY_POSTGRES_USER}
+    password: ${GA_MY_POSTGRES_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
   kafka:
-    bootstrap-servers: localhost:9092  # address where Kafka is run
+    bootstrap-servers: localhost:9092  # address of any Kafka broker=server where it's run
+    # after the found broker tell about others brokers
     template:
       default-topic: "notification_topic"
     consumer:
-      group-id: "notificationId"
+      group-id: "notificationId"   # it's need for different consumers, types of  processor
+      # like when we have notification for email, and notification by sms i would write
+      # smsId and emailId
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:

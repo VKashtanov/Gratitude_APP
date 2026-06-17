@@ -17,7 +17,7 @@ spring:
         spring.json.add.type.headers: true
 
   datasource:
-    url: jdbc:postgresql://localhost:5400/${GA_MY_POSTGRES_DB}
+    url: jdbc:postgresql://localhost:5400/orders_db
     username: ${GA_MY_POSTGRES_USER}
     password: ${GA_MY_POSTGRES_PASSWORD}
 

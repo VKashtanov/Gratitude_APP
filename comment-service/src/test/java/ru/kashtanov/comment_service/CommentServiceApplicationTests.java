@@ -1,10 +1,10 @@
-package ru.kashtanov.user_service;
+package ru.kashtanov.comment_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserServiceApplicationTests {
+class CommentServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -4,12 +4,11 @@ services:
     container_name: postgres
     ports:
       - "5400:5432"
-    env_file:
-      - .env
+
     environment:
       - POSTGRES_USER=${GA_MY_POSTGRES_USER}
       - POSTGRES_PASSWORD=${GA_MY_POSTGRES_PASSWORD}
-      - POSTGRES_DB=${GA_MY_POSTGRES_DB}
+      - POSTGRES_DB=users_db
     volumes:
       - C:\opt\postgres_data:/var/lib/postgresql/data
     restart: unless-stopped

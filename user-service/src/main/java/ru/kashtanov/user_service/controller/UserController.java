@@ -14,7 +14,6 @@ import ru.kashtanov.user_service.service.impl.UserServiceImpl;
 
 import java.util.List;
 import java.util.Map;
-
 /**
  * @author Viktor Кashtanov
  */
@@ -29,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDtoResponseSaved> addUser(@RequestBody RequestUserDto dto) {
+    public ResponseEntity<UserDtoResponseSaved> createUser(@RequestBody RequestUserDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(dto));
     }
 
