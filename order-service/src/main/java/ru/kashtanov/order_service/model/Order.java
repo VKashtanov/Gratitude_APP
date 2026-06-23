@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import ru.kashtanov.order_service.enums.OrderStatus;
 
 import java.security.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,10 +42,10 @@ public class Order {
     private OrderStatus status;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "finished_at")
-    private LocalDateTime finishedAt;
+    private Instant finishedAt;
 
 
 }

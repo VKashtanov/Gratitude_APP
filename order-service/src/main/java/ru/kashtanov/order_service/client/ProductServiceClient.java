@@ -4,7 +4,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import ru.kashtanov.order_service.dto.OrderDto;
+import ru.kashtanov.order_service.constant.EndpointEnum;
 import ru.kashtanov.order_service.dto.ProductDto;
 
 import java.util.List;
@@ -21,13 +21,13 @@ public class ProductServiceClient {
         this.webClient = webClient;
     }
 
-    public List<ProductDto> getProductsByAPI(OrderDto dto) {
-        String ids = dto.getProductIds().stream()
+    public List<ProductDto> getProductsByAPI(List<Long> productIds) {
+        String ids = productIds.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(","));
 
         Mono<List<ProductDto>> objectMono = webClient.get()
-                .uri("http://localhost:9015/api/v1/products/pointed?ids=" + ids)
+                .uri(EndpointEnum.GET_LIST_PRODUCTS.getUri() + ids)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<>() {
                 });

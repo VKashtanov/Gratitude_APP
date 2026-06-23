@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * @author Viktor Кashtanov
  */
@@ -16,7 +19,7 @@ public class Gratitude {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "gratitude_factory")
     @SequenceGenerator(name = "gratitude_factory", sequenceName = "gratitude_id_factory")
-    @Column(name = "id")
+    @Column(name = "gratitude_id")
     private Long id;
 
     @Column(name = "author_id")
@@ -26,6 +29,14 @@ public class Gratitude {
     private String content;
 
     @Column(name = "timestamp", columnDefinition = "BIGINT")
-    private Long timestamp;
+    private LocalDateTime timestamp;
+
+    @ElementCollection
+    @CollectionTable(name = "recipient_users",
+                   joinColumns = @JoinColumn(name = "gratitude_id"))
+    @Column(name = "recipient_id")
+    private List<Long> recipientIds;
+
+
 
 }

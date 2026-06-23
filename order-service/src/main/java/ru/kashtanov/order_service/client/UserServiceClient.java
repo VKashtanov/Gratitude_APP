@@ -4,7 +4,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import ru.kashtanov.order_service.dto.OrderDto;
+import ru.kashtanov.order_service.constant.EndpointEnum;
 import ru.kashtanov.order_service.dto.response.UserDtoResponseDetailed;
 
 /**
@@ -18,11 +18,10 @@ public class UserServiceClient {
         this.webClient = webClient;
     }
 
-    public UserDtoResponseDetailed fetchUserDto(OrderDto dto) {
-        var userId = dto.getUserId();
+    public UserDtoResponseDetailed fetchUserDto(Long userId) {
         // Mono returns one whole object. Flux return several object, kind of sequence
         Mono<UserDtoResponseDetailed> objectMono = webClient.get()
-                .uri("http://localhost:9060/api/users/" + userId)
+                .uri(EndpointEnum.GET_USER.getUri() + userId)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<>() { // to save specified type
                 });

@@ -1,4 +1,4 @@
-package ru.kashtanov.order_service.service;
+package ru.kashtanov.order_service.util;
 
 import org.springframework.stereotype.Component;
 import ru.kashtanov.order_service.dto.OrderSaveDto;
