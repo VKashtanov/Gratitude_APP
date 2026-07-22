@@ -17,14 +17,27 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name = "users" , uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"username","email"})
+})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_factory")
     @SequenceGenerator(name = "user_factory", sequenceName = "user_id_factory", allocationSize = 1)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private Long id;
 
+    // JWT authorization required fields
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;
+
+    @Column(name = "password_hash", nullable = false)
+    private String password;
+
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
+
+    // Other fields
     @Column(name = "firstname")
     private String firstName;
 
@@ -40,8 +53,6 @@ public class User {
     @Column(name = "portrait_url")
     private String portraitUrl;
 
-    @Column(name = "email")
-    private String email;
 
     @Column(name = "phone")
     private String phone;
@@ -60,13 +71,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<UsersRoles> usersRoles;
-
-    // JWT authorization fields
-    @Column(name = "username", unique = true, nullable = false)
-    private String username;
-
-    @Column(name = "password_hash", nullable = false)
-    private String password;
 
     @Column(name = "active")
     private boolean active = true;

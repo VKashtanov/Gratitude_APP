@@ -3,12 +3,9 @@ package ru.kashtanov.user_service.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.kashtanov.user_service.dto.request.RoleCreatedDto;
-import ru.kashtanov.user_service.dto.response.UserDeletedResponseDto;
-import ru.kashtanov.user_service.dto.response.role.RoleDeletedResponse;
+import ru.kashtanov.user_service.dto.request.RoleDto;
 import ru.kashtanov.user_service.exception.role_exceptions.RoleCrudOperationsException;
-import ru.kashtanov.user_service.exception.user_exceptions.UserNotFoundException;
 import ru.kashtanov.user_service.model.Role;
-import ru.kashtanov.user_service.model.User;
 import ru.kashtanov.user_service.repository.RoleRepo;
 import ru.kashtanov.user_service.util.RoleUtilService;
 
@@ -26,9 +23,17 @@ public class RoleServiceImpl {
         this.roleRepo = roleRepo;
     }
 
+    public Role findRoleById(Long id) {
+        Optional<Role> role = roleRepo.findById(id);
+        if (role.isEmpty()) {
+            throw new RoleCrudOperationsException("Role not found");
+        }
+        return role.get();
+    }
+
+
     public RoleCreatedDto createRole(String roleName) {
         if (roleName == null || roleName.isBlank()) {
-            // todo to create own exception
             throw new RoleCrudOperationsException("Role name cannot be empty");
         }
         Optional<Role> optionalRole = roleRepo.findByRoleName(roleName);
@@ -42,7 +47,7 @@ public class RoleServiceImpl {
         return createdDto;
     }
 
-    public RoleDeletedResponse deleteRoleyId(Long id) {
+    public RoleDto deleteRoleyId(Long id) {
         if (id == null) {
             throw new RoleCrudOperationsException("Id cannot be null");
         }
@@ -52,7 +57,7 @@ public class RoleServiceImpl {
         }
         Role role = optionalRole.get();
         roleRepo.delete(role);
-        return RoleUtilService.toRoleDeletedResponse(role);
+        return RoleUtilService.toRoleDto(role);
 
     }
 }

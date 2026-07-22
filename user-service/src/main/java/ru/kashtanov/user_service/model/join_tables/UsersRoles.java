@@ -18,7 +18,7 @@ import ru.kashtanov.user_service.model.User;
 @AllArgsConstructor
 public class UsersRoles {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_roles_factory_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_roles_factory")
     @SequenceGenerator(name = "user_roles_factory", sequenceName = "user_roles_factory_id", allocationSize = 1)
     private Long id;
 

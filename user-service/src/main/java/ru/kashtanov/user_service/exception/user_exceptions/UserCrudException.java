@@ -6,9 +6,9 @@ import lombok.Getter;
  * @author Viktor Кashtanov
  */
 @Getter
-public class ImpossibleSaveUserException extends RuntimeException {
+public class UserCrudException extends RuntimeException {
 
-    public ImpossibleSaveUserException(String message) {
+    public UserCrudException(String message) {
         super(message);
     }
 }

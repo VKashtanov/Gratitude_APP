@@ -1,10 +1,12 @@
 package ru.kashtanov.user_service.util;
 
 import ru.kashtanov.user_service.dto.request.RequestUserDto;
+import ru.kashtanov.user_service.dto.request.UserRegisterDto;
 import ru.kashtanov.user_service.dto.response.UserDeletedResponseDto;
 import ru.kashtanov.user_service.dto.response.UserDtoFieldsUpdatedResponse;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseDetailed;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseSaved;
+import ru.kashtanov.user_service.exception.user_exceptions.UserCrudException;
 import ru.kashtanov.user_service.model.User;
 
 import java.util.Map;
@@ -15,7 +17,7 @@ import java.util.Map;
 public class UserUtilService {
 
     // ** UTIL USER CLASS METHODS **
-    public User transformToUser(RequestUserDto dto) {
+    public static User transformToUser(RequestUserDto dto) {
         var user = new User();
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
@@ -31,7 +33,7 @@ public class UserUtilService {
         return user;
     }
 
-    public UserDtoResponseSaved transformToRequestUserDto(User user) {
+    public static UserDtoResponseSaved toUserDtoResponseSaved(User user) {
         var dto = new UserDtoResponseSaved();
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
@@ -41,7 +43,7 @@ public class UserUtilService {
     }
 
 
-    public UserDtoResponseDetailed transformToResponseDetailedUserDto(User user) {
+    public static UserDtoResponseDetailed transformToResponseDetailedUserDto(User user) {
         var dto = new UserDtoResponseDetailed();
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
@@ -59,7 +61,7 @@ public class UserUtilService {
     }
 
 
-    public UserDtoFieldsUpdatedResponse updateUserFields(Map<String, Object> userDetails, User user) {
+    public static UserDtoFieldsUpdatedResponse updateUserFields(Map<String, Object> userDetails, User user) {
         var updatedFields = new UserDtoFieldsUpdatedResponse();
         for (Map.Entry<String, Object> entry : userDetails.entrySet()) {
             String key = entry.getKey();
@@ -116,12 +118,28 @@ public class UserUtilService {
         return updatedFields;
     }
 
-    public UserDeletedResponseDto transformToUserDeletedResponseDto(User user) {
+    public static UserDeletedResponseDto transformToUserDeletedResponseDto(User user) {
         var dto = new UserDeletedResponseDto();
         dto.setUserId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         return dto;
+    }
+
+    public static boolean validateUserRegisterDto(UserRegisterDto dto) {
+        if(dto == null){
+            throw new UserCrudException("User dto cannot be null");
+        }
+        if(dto.getEmail() == null || dto.getEmail().isEmpty()){
+            throw new UserCrudException("Email cannot be null or empty");
+        }
+        if(dto.getPassword() == null || dto.getPassword().isEmpty()){
+            throw new UserCrudException("Password cannot be null or empty");
+        }
+        if(dto.getUsername() == null || dto.getUsername().isEmpty()){
+            throw new UserCrudException("Username cannot be null or empty");
+        }
+        return true;
     }
 }

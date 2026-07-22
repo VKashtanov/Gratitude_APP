@@ -5,11 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.kashtanov.user_service.dto.response.ErrorResponse;
-import ru.kashtanov.user_service.exception.user_exceptions.ImpossibleSaveUserException;
+import ru.kashtanov.user_service.exception.user_exceptions.UserCrudException;
 import ru.kashtanov.user_service.exception.user_exceptions.UserNotFoundException;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 /**
  * @author Viktor Кashtanov
@@ -17,8 +16,8 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class UserExceptionHandler {
 
-    @ExceptionHandler(ImpossibleSaveUserException.class)
-    public ResponseEntity<ErrorResponse> impossibleSaveUser(ImpossibleSaveUserException ex) {
+    @ExceptionHandler(UserCrudException.class)
+    public ResponseEntity<ErrorResponse> impossibleSaveUser(UserCrudException ex) {
         HttpStatus status = HttpStatus.CONFLICT;//409
         return ResponseEntity.status(status)
                 .body(ErrorResponse.builder()

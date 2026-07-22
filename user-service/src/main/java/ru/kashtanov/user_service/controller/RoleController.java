@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kashtanov.user_service.dto.request.RoleCreatedDto;
-import ru.kashtanov.user_service.dto.response.role.RoleDeletedResponse;
+import ru.kashtanov.user_service.dto.request.RoleDto;
 import ru.kashtanov.user_service.service.impl.RoleServiceImpl;
 
 /**
@@ -25,7 +25,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{roleId}")
-    public ResponseEntity<RoleDeletedResponse> deleteById(@PathVariable Long roleId) {
+    public ResponseEntity<RoleDto> deleteById(@PathVariable Long roleId) {
         return ResponseEntity.status(HttpStatus.OK).body(roleService.deleteRoleyId(roleId));
     }
 }

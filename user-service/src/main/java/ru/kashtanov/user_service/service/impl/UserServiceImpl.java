@@ -1,13 +1,14 @@
 package ru.kashtanov.user_service.service.impl;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.kashtanov.user_service.dto.request.RequestUserDto;
+import ru.kashtanov.user_service.dto.request.UserRegisterDto;
 import ru.kashtanov.user_service.dto.response.UserDeletedResponseDto;
 import ru.kashtanov.user_service.dto.response.UserDtoFieldsUpdatedResponse;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseDetailed;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseSaved;
-import ru.kashtanov.user_service.exception.user_exceptions.ImpossibleSaveUserException;
+import ru.kashtanov.user_service.exception.user_exceptions.UserCrudException;
 import ru.kashtanov.user_service.exception.user_exceptions.UserNotFoundException;
 import ru.kashtanov.user_service.model.User;
 import ru.kashtanov.user_service.repository.UserRepo;
@@ -15,6 +16,7 @@ import ru.kashtanov.user_service.util.UserUtilService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Viktor Кashtanov
@@ -29,19 +31,32 @@ public class UserServiceImpl {
         this.userRepo = userRepo;
     }
 
-    public UserDtoResponseSaved createUser(RequestUserDto dto) {
+    public User createUser(UserRegisterDto dto) {
         try {
-            User user = utilUserService.transformToUser(dto);
-            User savedUser = userRepo.save(user);
-            return utilUserService.transformToRequestUserDto(savedUser);
-        } catch (Exception e) {
-            throw new ImpossibleSaveUserException("Impossible save user because of an exception: " + e.getMessage());
+            UserUtilService.validateUserRegisterDto(dto);
+            User user = new User();
+            user.setUsername(dto.getUsername());
+            user.setPassword(dto.getPassword());
+            user.setEmail(dto.getEmail());
+            return userRepo.save(user);
+        } catch (DataIntegrityViolationException e) {
+            String message = e.getRootCause().getMessage();
+            if (message.contains("username")) {
+                throw new UserCrudException("Username '" + dto.getUsername() + "' is already taken");
+            } else if (message.contains("email")) {
+                throw new UserCrudException("Email '" + dto.getEmail() + "' is already in use");
+            } else {
+                throw new UserCrudException("Failed to create user. Please check your data.");
+            }
         }
     }
 
-    public UserDtoResponseDetailed findUserById(Long id) {
-        User user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("User with id:" + id + " is not found"));
-        return utilUserService.transformToResponseDetailedUserDto(user);
+    public User findUserById(Long id) {
+        if (id == null) {
+            throw new UserNotFoundException("User Id is null");
+        }
+        return userRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id:" + id + " is not found"));
     }
 
 
@@ -61,9 +76,10 @@ public class UserServiceImpl {
 
     public List<UserDtoResponseDetailed> findAllUsers(Pageable pageable) {
         List<User> users = userRepo.findAll(pageable).toList();
-        return users.stream().map(utilUserService::transformToResponseDetailedUserDto).toList();
+        return users.stream().map(
+                UserUtilService::transformToResponseDetailedUserDto
+        ).toList();
     }
-
 
 
 }

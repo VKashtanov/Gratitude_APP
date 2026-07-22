@@ -4,13 +4,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kashtanov.user_service.dto.request.RequestUserDto;
+import ru.kashtanov.user_service.dto.request.UserRegisterDto;
 import ru.kashtanov.user_service.dto.response.UserDeletedResponseDto;
 import ru.kashtanov.user_service.dto.response.UserDtoFieldsUpdatedResponse;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseDetailed;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseSaved;
 
+import ru.kashtanov.user_service.model.User;
 import ru.kashtanov.user_service.service.impl.UserServiceImpl;
+import ru.kashtanov.user_service.util.UserUtilService;
 
 import java.util.List;
 import java.util.Map;
@@ -28,13 +30,17 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDtoResponseSaved> createUser(@RequestBody RequestUserDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(dto));
+    public ResponseEntity<UserDtoResponseSaved> createUser(@RequestBody UserRegisterDto dto) {
+        User user = userService.createUser(dto);
+        var response = UserUtilService.toUserDtoResponseSaved(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserDtoResponseDetailed> getUserById(@PathVariable Long userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findUserById(userId));
+        User userById = userService.findUserById(userId);
+        var response = UserUtilService.transformToResponseDetailedUserDto(userById);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping("/{userId}")
