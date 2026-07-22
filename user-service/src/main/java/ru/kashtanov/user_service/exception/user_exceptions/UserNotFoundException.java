@@ -1,4 +1,4 @@
-package ru.kashtanov.user_service.exception;
+package ru.kashtanov.user_service.exception.user_exceptions;
 
 import lombok.Getter;
 

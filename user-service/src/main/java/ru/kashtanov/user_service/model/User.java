@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.kashtanov.user_service.model.join_tables.UsersRoles;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Viktor Кashtanov
@@ -53,5 +58,23 @@ public class User {
     @Column(name = "country")
     private String country;
 
+    @OneToMany(mappedBy = "user")
+    private List<UsersRoles> usersRoles;
+
+    // JWT authorization fields
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;
+
+    @Column(name = "password_hash", nullable = false)
+    private String password;
+
+    @Column(name = "active")
+    private boolean active = true;
+
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
 }

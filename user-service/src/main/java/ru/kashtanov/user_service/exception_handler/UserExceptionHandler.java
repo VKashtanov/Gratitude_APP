@@ -5,9 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.kashtanov.user_service.dto.response.ErrorResponse;
-import ru.kashtanov.user_service.exception.ImpossibleSaveUserException;
-import ru.kashtanov.user_service.exception.UserNotFoundException;
+import ru.kashtanov.user_service.exception.user_exceptions.ImpossibleSaveUserException;
+import ru.kashtanov.user_service.exception.user_exceptions.UserNotFoundException;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -21,7 +22,7 @@ public class UserExceptionHandler {
         HttpStatus status = HttpStatus.CONFLICT;//409
         return ResponseEntity.status(status)
                 .body(ErrorResponse.builder()
-                        .timestamp(LocalDateTime.now())
+                        .timestamp(Instant.now())
                         .status(status.value())
                         .error("Impossible save user")
                         .message(ex.getMessage())
@@ -34,7 +35,7 @@ public class UserExceptionHandler {
         return ResponseEntity
                 .status(status)
                 .body(ErrorResponse.builder()
-                        .timestamp(LocalDateTime.now())
+                        .timestamp(Instant.now())
                         .status(status.value())
                         .error("Not Found")
                         .message(ex.getMessage())
@@ -46,7 +47,7 @@ public class UserExceptionHandler {
         return ResponseEntity
                 .status(status)
                 .body(ErrorResponse.builder()
-                        .timestamp(LocalDateTime.now())
+                        .timestamp(Instant.now())
                         .status(status.value())
                         .error("Bad Request")
                         .message(ex.getMessage())
