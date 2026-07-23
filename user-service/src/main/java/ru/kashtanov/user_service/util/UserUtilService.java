@@ -1,7 +1,7 @@
 package ru.kashtanov.user_service.util;
 
-import ru.kashtanov.user_service.dto.request.RequestUserDto;
-import ru.kashtanov.user_service.dto.request.UserRegisterDto;
+import ru.kashtanov.user_service.dto.request.user.UserDto;
+import ru.kashtanov.user_service.dto.request.user.UserRegisterDto;
 import ru.kashtanov.user_service.dto.response.UserDeletedResponseDto;
 import ru.kashtanov.user_service.dto.response.UserDtoFieldsUpdatedResponse;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseDetailed;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class UserUtilService {
 
     // ** UTIL USER CLASS METHODS **
-    public static User transformToUser(RequestUserDto dto) {
+    public static User transformToUser(UserDto dto) {
         var user = new User();
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());

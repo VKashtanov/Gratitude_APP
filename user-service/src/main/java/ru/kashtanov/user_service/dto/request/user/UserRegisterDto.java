@@ -1,4 +1,4 @@
-package ru.kashtanov.user_service.dto.request;
+package ru.kashtanov.user_service.dto.request.user;
 
 import lombok.*;
 

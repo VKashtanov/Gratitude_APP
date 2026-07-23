@@ -6,12 +6,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.kashtanov.user_service.model.join_tables.UsersRoles;
 
+import java.util.Optional;
+
 /**
  * @author Viktor Кashtanov
  */
 @Repository
 public interface UsersRolesRepo extends JpaRepository<UsersRoles, Long> {
-
-    @Query(value = "SELECT * FROM users_roles WHERE role_id = :roleId AND user_id =:userId" , nativeQuery = true)
-    public UsersRoles findByRoleIdAndUserId(@Param(value = "roleId") Long roleId, @Param(value = "userId") Long userId);
+//    SELECT * FROM users_roles WHERE role_id=2 AND user_id=38
+    @Query(value = "SELECT * FROM users_roles WHERE role_id = :role_id AND user_id =:user_id" , nativeQuery = true)
+    public Optional<UsersRoles> findByRoleIdAndUserId(@Param(value = "role_id") Long role_id,
+                                                      @Param(value = "user_id") Long user_id);
 }

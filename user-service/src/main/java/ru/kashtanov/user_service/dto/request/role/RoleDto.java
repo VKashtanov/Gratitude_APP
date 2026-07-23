@@ -1,4 +1,4 @@
-package ru.kashtanov.user_service.dto.request;
+package ru.kashtanov.user_service.dto.request.role;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

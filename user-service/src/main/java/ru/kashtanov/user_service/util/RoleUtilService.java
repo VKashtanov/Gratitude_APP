@@ -1,6 +1,6 @@
 package ru.kashtanov.user_service.util;
 
-import ru.kashtanov.user_service.dto.request.RoleDto;
+import ru.kashtanov.user_service.dto.request.role.RoleDto;
 import ru.kashtanov.user_service.model.Role;
 
 /**

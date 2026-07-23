@@ -4,7 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kashtanov.user_service.dto.request.UserRegisterDto;
+import ru.kashtanov.user_service.dto.request.user.UserRegisterDto;
 import ru.kashtanov.user_service.dto.response.UserDeletedResponseDto;
 import ru.kashtanov.user_service.dto.response.UserDtoFieldsUpdatedResponse;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseDetailed;

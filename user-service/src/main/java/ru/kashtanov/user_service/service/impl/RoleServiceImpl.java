@@ -2,8 +2,8 @@ package ru.kashtanov.user_service.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.kashtanov.user_service.dto.request.RoleCreatedDto;
-import ru.kashtanov.user_service.dto.request.RoleDto;
+import ru.kashtanov.user_service.dto.response.RoleResponseDto;
+import ru.kashtanov.user_service.dto.request.role.RoleDto;
 import ru.kashtanov.user_service.exception.role_exceptions.RoleCrudOperationsException;
 import ru.kashtanov.user_service.model.Role;
 import ru.kashtanov.user_service.repository.RoleRepo;
@@ -32,7 +32,7 @@ public class RoleServiceImpl {
     }
 
 
-    public RoleCreatedDto createRole(String roleName) {
+    public RoleResponseDto createRole(String roleName) {
         if (roleName == null || roleName.isBlank()) {
             throw new RoleCrudOperationsException("Role name cannot be empty");
         }
@@ -41,7 +41,7 @@ public class RoleServiceImpl {
             throw new RoleCrudOperationsException("Can't create a role with the name " + roleName + " already exists");
         }
         roleRepo.save(new Role(roleName));
-        var createdDto = new RoleCreatedDto();
+        var createdDto = new RoleResponseDto();
         createdDto.setRoleName(roleName);
         log.info("Role created: {}", createdDto);
         return createdDto;

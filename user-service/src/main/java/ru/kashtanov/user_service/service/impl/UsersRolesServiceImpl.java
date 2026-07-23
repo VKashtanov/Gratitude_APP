@@ -1,6 +1,7 @@
 package ru.kashtanov.user_service.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.kashtanov.user_service.dto.request.role.UserRoleDto;
 import ru.kashtanov.user_service.exception.user_roles_exceptions.UserRolesCrudException;
 import ru.kashtanov.user_service.model.Role;
 import ru.kashtanov.user_service.model.User;
@@ -23,16 +24,24 @@ public class UsersRolesServiceImpl {
         this.usersRolesRepo = usersRolesRepo;
     }
 
-    public void attachRoleOnUser(Long userId, Long roleId) {
+    public UsersRoles attachRoleOnUser(Long userId, Long roleId) {
+        var dto = validateAndGet(userId, roleId);
+        var usersRoles = new UsersRoles(null, dto.role(), dto.user());
+        return usersRolesRepo.save(usersRoles);
+    }
+
+    private UserRoleDto validateAndGet(Long userId, Long roleId) {
         if (userId == null) throw new UserRolesCrudException("userId is null");
         if (roleId == null) throw new UserRolesCrudException("roleId is null");
 
-        User userById = userService.findUserById(userId);
-        Role roleById = roleService.findRoleById(roleId);
+        User user = userService.findUserById(userId);
+        Role role = roleService.findRoleById(roleId);
 
-//        usersRolesRepo.findByUserIdR
-        var usersRoles = new UsersRoles(null, roleById, userById);
-        usersRolesRepo.save(usersRoles);
+        usersRolesRepo.findByRoleIdAndUserId(roleId, userId).ifPresent(ur -> {
+            throw new UserRolesCrudException("User with this role already exists");
+        });
+        return new UserRoleDto(user, role);
+
     }
 
 

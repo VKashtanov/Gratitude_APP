@@ -1,4 +1,4 @@
-package ru.kashtanov.user_service.dto.request;
+package ru.kashtanov.user_service.dto.request.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestUserDto {
+public class UserDto {
     private String firstName;
     private String lastName;
     private String middleName;
@@ -30,7 +30,7 @@ public class RequestUserDto {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        RequestUserDto dto = (RequestUserDto) o;
+        UserDto dto = (UserDto) o;
         return Objects.equals(firstName, dto.firstName) && Objects.equals(lastName, dto.lastName) && Objects.equals(middleName, dto.middleName) && Objects.equals(position, dto.position) && Objects.equals(portraitUrl, dto.portraitUrl) && Objects.equals(phone, dto.phone) && Objects.equals(email, dto.email) && Objects.equals(address, dto.address) && Objects.equals(city, dto.city) && Objects.equals(state, dto.state) && Objects.equals(country, dto.country);
     }
 

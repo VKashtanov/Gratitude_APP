@@ -3,11 +3,10 @@ package ru.kashtanov.user_service.service.impl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.kashtanov.user_service.dto.request.UserRegisterDto;
+import ru.kashtanov.user_service.dto.request.user.UserRegisterDto;
 import ru.kashtanov.user_service.dto.response.UserDeletedResponseDto;
 import ru.kashtanov.user_service.dto.response.UserDtoFieldsUpdatedResponse;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseDetailed;
-import ru.kashtanov.user_service.dto.response.UserDtoResponseSaved;
 import ru.kashtanov.user_service.exception.user_exceptions.UserCrudException;
 import ru.kashtanov.user_service.exception.user_exceptions.UserNotFoundException;
 import ru.kashtanov.user_service.model.User;
@@ -16,7 +15,7 @@ import ru.kashtanov.user_service.util.UserUtilService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Viktor Кashtanov
@@ -62,14 +61,14 @@ public class UserServiceImpl {
 
     public UserDtoFieldsUpdatedResponse updateUserById(Long id, Map<String, Object> userDetails) throws IllegalArgumentException {
         User user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("User with id:" + id + " is not found"));
-        var updatedFields = utilUserService.updateUserFields(userDetails, user);
+        var updatedFields = UserUtilService.updateUserFields(userDetails, user);
         userRepo.save(user);
         return updatedFields;
     }
 
     public UserDeletedResponseDto deleteUserById(Long id) {
         User user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("User with id:" + id + " is not found"));
-        var deletedUser = utilUserService.transformToUserDeletedResponseDto(user);
+        var deletedUser = UserUtilService.transformToUserDeletedResponseDto(user);
         userRepo.deleteById(id);
         return deletedUser;
     }
@@ -78,7 +77,7 @@ public class UserServiceImpl {
         List<User> users = userRepo.findAll(pageable).toList();
         return users.stream().map(
                 UserUtilService::transformToResponseDetailedUserDto
-        ).toList();
+        ).collect(Collectors.toList());
     }
 
 
