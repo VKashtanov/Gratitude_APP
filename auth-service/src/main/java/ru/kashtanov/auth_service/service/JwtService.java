@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -15,7 +16,10 @@ import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static reactor.netty.http.HttpConnectionLiveness.log;
 
 
 /**
@@ -34,14 +38,28 @@ public class JwtService {
     private Long refreshExpirationDate;
 
 
-    public String generateToken(Authentication authentication) {
+    @PostConstruct
+    public void init() {
+        if (jwtSecret == null || jwtSecret.isBlank()) {
+            throw new IllegalStateException("JWT secret must be configured in application properties!");
+        }
+        if (accessExpirationDate == null || accessExpirationDate <= 0) {
+            throw new IllegalStateException("JWT access expiration must be configured!");
+        }
+        if (refreshExpirationDate == null || refreshExpirationDate <= 0) {
+            throw new IllegalStateException("JWT refresh expiration must be configured!");
+        }
+        log.info("JWT Service initialized successfully");
+    }
+
+    public String generateAccessToken(Authentication authentication) {
         String username = authentication.getName();
         Instant now = Instant.now();
         Instant expirationAccessTokenDate = now.plusMillis(accessExpirationDate);
 
-        List<String> roles = authentication.getAuthorities().stream()
+        Set<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         return Jwts.builder()
                 .setSubject(username)
@@ -63,6 +81,29 @@ public class JwtService {
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
+
+    public String extractUsername(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSecretKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> extractRoles(String token) {
+        return extractAllClaims(token).get("roles", List.class);
+    }
+     // does it must match
+    private SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)); // converts string to crypto graphic key
+    }
+
 
     public ValidateTokenDto validateToken(String token) {
         var dto = new ValidateTokenDto();
@@ -104,24 +145,5 @@ public class JwtService {
         }
     }
 
-    public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
-    }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSecretKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<String> extractRoles(String token) {
-        return extractAllClaims(token).get("roles", List.class);
-    }
-
-    private SecretKey getSecretKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)); // converts string to crypto graphic key
-    }
 }

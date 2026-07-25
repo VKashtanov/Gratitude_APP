@@ -5,6 +5,7 @@ import ru.kashtanov.order_service.enums.OrderStatus;
 
 
 import java.security.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +18,6 @@ public class OrderDto {
     private Long userId;
     private List<Long> productIds;
     private OrderStatus status;
-    private LocalDateTime createdAt;
-    private LocalDateTime finishedAt;
+    private Instant createdAt;
+    private Instant finishedAt;
 }

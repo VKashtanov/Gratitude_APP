@@ -50,6 +50,14 @@ public class UserServiceImpl {
         }
     }
 
+    public User findUserByUsername(String username) {
+        if (username == null || username.isBlank()) {
+            throw new UserNotFoundException("Username cannot be null or empty");
+        }
+        return userRepo.findByUsername(username).orElseThrow(() -> new UserNotFoundException("Username '" + username + "' not found"));
+    }
+
+
     public User findUserById(Long id) {
         if (id == null) {
             throw new UserNotFoundException("User Id is null");
@@ -76,7 +84,7 @@ public class UserServiceImpl {
     public List<UserDtoResponseDetailed> findAllUsers(Pageable pageable) {
         List<User> users = userRepo.findAll(pageable).toList();
         return users.stream().map(
-                UserUtilService::transformToResponseDetailedUserDto
+                UserUtilService::toUserDtoResponseDetailed
         ).collect(Collectors.toList());
     }
 

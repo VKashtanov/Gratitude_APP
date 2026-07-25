@@ -28,8 +28,4 @@ spring:
       group-id: "notificationId"   # it's need for different consumers, types of  processor
       # like when we have notification for email, and notification by sms i would write
       # smsId and emailId
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      properties:
-        spring.json.type.mapping: "ru.kashtanov.order_service.dto.OrderPlacedEvent:ru.kashtanov.notification_service.dto.OrderPlacedEvent"
-        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer

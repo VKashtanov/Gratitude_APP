@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import ru.kashtanov.order_service.dto.response.UserDtoResponseDetailed;
 import ru.kashtanov.order_service.enums.OrderStatus;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class FullOrderInfo {
     private Long orderId;
     private List<Long> productIds;
     private OrderStatus status;
-    private LocalDateTime createdAt;
-    private LocalDateTime finishedAt;
+    private Instant createdAt;
+    private Instant finishedAt;
     private UserDtoResponseDetailed user;
     private List<ProductDto> products;
 }

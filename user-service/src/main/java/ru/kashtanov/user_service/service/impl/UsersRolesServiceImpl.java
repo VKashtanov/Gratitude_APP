@@ -30,6 +30,7 @@ public class UsersRolesServiceImpl {
         return usersRolesRepo.save(usersRoles);
     }
 
+
     private UserRoleDto validateAndGet(Long userId, Long roleId) {
         if (userId == null) throw new UserRolesCrudException("userId is null");
         if (roleId == null) throw new UserRolesCrudException("roleId is null");

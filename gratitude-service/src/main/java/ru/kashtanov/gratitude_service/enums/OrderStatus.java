@@ -1,4 +1,4 @@
-package ru.kashtanov.order_service.enums;
+package ru.kashtanov.gratitude_service.enums;
 
 /**
  * @author Viktor Кashtanov

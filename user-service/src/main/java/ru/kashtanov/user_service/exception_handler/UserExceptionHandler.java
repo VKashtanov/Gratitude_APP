@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.kashtanov.user_service.dto.response.ErrorResponse;
 import ru.kashtanov.user_service.exception.user_exceptions.UserCrudException;
 import ru.kashtanov.user_service.exception.user_exceptions.UserNotFoundException;
+import ru.kashtanov.user_service.exception.user_exceptions.UserValidationException;
 
 import java.time.Instant;
 
@@ -28,6 +29,18 @@ public class UserExceptionHandler {
                         .build());
     }
 
+    @ExceptionHandler(UserValidationException.class)
+    public ResponseEntity<ErrorResponse> handleUserValidationException(UserCrudException ex) {
+        HttpStatus status = HttpStatus.CONFLICT;//409
+        return ResponseEntity.status(status)
+                .body(ErrorResponse.builder()
+                        .timestamp(Instant.now())
+                        .status(status.value())
+                        .error("Field is not valid")
+                        .message(ex.getMessage())
+                        .build());
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
         HttpStatus status = HttpStatus.NOT_FOUND;//404
@@ -40,6 +53,7 @@ public class UserExceptionHandler {
                         .message(ex.getMessage())
                         .build());
     }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleUserFieldNotFound(IllegalArgumentException ex) {
         HttpStatus status = HttpStatus.BAD_REQUEST;//400

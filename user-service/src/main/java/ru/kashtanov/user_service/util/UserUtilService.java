@@ -7,9 +7,14 @@ import ru.kashtanov.user_service.dto.response.UserDtoFieldsUpdatedResponse;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseDetailed;
 import ru.kashtanov.user_service.dto.response.UserDtoResponseSaved;
 import ru.kashtanov.user_service.exception.user_exceptions.UserCrudException;
+import ru.kashtanov.user_service.exception.user_exceptions.UserValidationException;
+import ru.kashtanov.user_service.model.Role;
 import ru.kashtanov.user_service.model.User;
+import ru.kashtanov.user_service.model.join_tables.UsersRoles;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Viktor Кashtanov
@@ -42,8 +47,31 @@ public class UserUtilService {
         return dto;
     }
 
+    public static UserRegisterDto toUserRegisterDto(User user) {
+        if (user == null) {
+            throw new UserValidationException("User is null");
+        }
+        String email = user.getEmail();
+        String username = user.getUsername();
+        String password = user.getPassword();
+        if (email == null || email.isBlank()) {
+            throw new UserValidationException("Email is blank");
+        }
+        if (username == null || username.isBlank()) {
+            throw new UserValidationException("Username is blank");
+        }
+        if (password == null || password.isBlank()) {
+            throw new UserValidationException("Password is blank");
+        }
+        Set<String> roles = user.getUsersRoles().stream()
+                .map(ur->ur.getRole().getRoleName())
+                .collect(Collectors.toSet());
 
-    public static UserDtoResponseDetailed transformToResponseDetailedUserDto(User user) {
+        return new  UserRegisterDto(email, username, password,roles);
+    }
+
+
+    public static UserDtoResponseDetailed toUserDtoResponseDetailed(User user) {
         var dto = new UserDtoResponseDetailed();
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
@@ -128,16 +156,16 @@ public class UserUtilService {
     }
 
     public static boolean validateUserRegisterDto(UserRegisterDto dto) {
-        if(dto == null){
+        if (dto == null) {
             throw new UserCrudException("User dto cannot be null");
         }
-        if(dto.getEmail() == null || dto.getEmail().isEmpty()){
+        if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
             throw new UserCrudException("Email cannot be null or empty");
         }
-        if(dto.getPassword() == null || dto.getPassword().isEmpty()){
+        if (dto.getPassword() == null || dto.getPassword().isEmpty()) {
             throw new UserCrudException("Password cannot be null or empty");
         }
-        if(dto.getUsername() == null || dto.getUsername().isEmpty()){
+        if (dto.getUsername() == null || dto.getUsername().isEmpty()) {
             throw new UserCrudException("Username cannot be null or empty");
         }
         return true;

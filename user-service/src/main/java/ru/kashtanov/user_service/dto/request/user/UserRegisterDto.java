@@ -2,7 +2,9 @@ package ru.kashtanov.user_service.dto.request.user;
 
 import lombok.*;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Viktor Кashtanov
@@ -12,11 +14,22 @@ public class UserRegisterDto {
     private String username;
     private String email;
     private String password;
+    private Set<String> roles;
+
+    public UserRegisterDto() {
+    }
 
     public UserRegisterDto(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public UserRegisterDto(String username, String email, String password, Set<String> roles) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
     @Override

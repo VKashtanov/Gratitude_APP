@@ -1,9 +1,14 @@
 package ru.kashtanov.notification_service.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.internals.Topic;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import ru.kashtanov.notification_service.constant.TopicConstant;
 import ru.kashtanov.notification_service.dto.OrderPlacedEvent;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+
 
 /**
  * @author Viktor Кashtanov
@@ -12,12 +17,17 @@ import ru.kashtanov.notification_service.dto.OrderPlacedEvent;
 @Service
 public class NotificationConsumerService {
 
-    @KafkaListener(topics = "notification_topic")
-    public void handleOrderPlaced(OrderPlacedEvent event) {
-        log.info("📩 Получено событие: {}", event);
+    @KafkaListener(topics = TopicConstant.NOTIFICATION_TOPIC)
+    public void handleOrderPlaced(String event) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            OrderPlacedEvent orderPlacedEvent = mapper.readValue(event, OrderPlacedEvent.class);
+            System.out.println("OrderPlacedEvent: " + orderPlacedEvent);
 
-        System.out.println("Заказ №" + event.getOrderId() + " создан!");
-        System.out.println("Email пользователя: " + event.getUserEmail());
-        System.out.println("Сумма: " + event.getOrderPrice());
+            log.info("📩 Получено событие: {}", event);
+        } catch (JacksonException e) {
+            System.err.println("Could not deserialize order placed event: " + e.getMessage());
+        }
+
     }
 }

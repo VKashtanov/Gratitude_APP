@@ -19,7 +19,7 @@ public class OrderProducerService {
     }
 
     public void sendOrderPlacedEvent(OrderPlacedEvent orderPlacedEvent) {
-        kafkaTemplate.send(TopicConstant.TOPIC.getValue(), orderPlacedEvent)
+        kafkaTemplate.send(TopicConstant.NOTIFICATION_TOPIC.getValue(), orderPlacedEvent)
                 .whenComplete((result, exception) -> {
                     if (exception == null) {
                         log.error("Something went wrong upon sending even :" + exception.getMessage());

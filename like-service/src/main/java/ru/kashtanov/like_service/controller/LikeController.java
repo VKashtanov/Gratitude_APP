@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kashtanov.like_service.dto.LikeDto;
 import ru.kashtanov.like_service.dto.LikeSaveDto;
+import ru.kashtanov.like_service.model.Like;
 import ru.kashtanov.like_service.service.LikeService;
 
 import java.net.URI;
@@ -31,7 +32,7 @@ public class LikeController {
 
 // only user that left comment is able to delete it
     @DeleteMapping
-    public ResponseEntity<LikeDto> deleteLike(LikeDto likeSaveDto) {
+    public ResponseEntity<LikeDto> deleteLike(LikeSaveDto likeSaveDto) {
         LikeDto likeDto = likeService.deleteLike(likeSaveDto);
         return ResponseEntity.ok(likeDto);
     }

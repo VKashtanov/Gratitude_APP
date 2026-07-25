@@ -1,5 +1,6 @@
 package ru.kashtanov.user_service.controller;
 
+import jakarta.websocket.server.PathParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import ru.kashtanov.user_service.util.UserUtilService;
 
 import java.util.List;
 import java.util.Map;
+
 /**
  * @author Viktor Кashtanov
  */
@@ -39,9 +41,17 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserDtoResponseDetailed> getUserById(@PathVariable Long userId) {
         User userById = userService.findUserById(userId);
-        var response = UserUtilService.transformToResponseDetailedUserDto(userById);
+        var response = UserUtilService.toUserDtoResponseDetailed(userById);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping
+    public ResponseEntity<UserRegisterDto> getUserByUserName(@RequestParam(value = "username") String username) {
+        User user = userService.findUserByUsername(username);
+        var response = UserUtilService.toUserRegisterDto(user);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 
     @PatchMapping("/{userId}")
     public ResponseEntity<UserDtoFieldsUpdatedResponse> updateById(@PathVariable Long userId, @RequestBody Map<String, Object> map) {
@@ -53,10 +63,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUserById(userId));
     }
 
-    @GetMapping
-    public List<UserDtoResponseDetailed> getAllUsers(Pageable pageable) {
-        return userService.findAllUsers(pageable);
-    }
+//    @GetMapping
+//    public List<UserDtoResponseDetailed> getAllUsers(Pageable pageable) {
+//        return userService.findAllUsers(pageable);
+//    }
 
 
 }

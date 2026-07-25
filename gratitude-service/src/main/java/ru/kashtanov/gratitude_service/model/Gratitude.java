@@ -4,7 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,10 +33,13 @@ public class Gratitude {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "timestamp", columnDefinition = "BIGINT")
-    private LocalDateTime timestamp;
+    @CreationTimestamp
+    @Column(name = "timestamp", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private Instant timestamp;
 
     @ElementCollection
+    @Fetch(FetchMode.SUBSELECT)
+    @BatchSize(size=100)
     @CollectionTable(name = "recipient_users",
                    joinColumns = @JoinColumn(name = "gratitude_id"))
     @Column(name = "recipient_id")

@@ -2,6 +2,8 @@ package ru.kashtanov.order_service.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kashtanov.order_service.client.ProductServiceClient;
 import ru.kashtanov.order_service.client.UserServiceClient;
@@ -18,6 +20,7 @@ import ru.kashtanov.order_service.repo.OrderRepo;
 import ru.kashtanov.order_service.util.OrderMapper;
 import ru.kashtanov.order_service.util.ValidationService;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -49,7 +52,7 @@ public class OrderService {
         }
         Order order = orderMapper.toEntity(dto);
         order.setStatus(OrderStatus.PENDING);
-        order.setCreatedAt(LocalDateTime.now());
+//        order.setCreatedAt(Instant.from(LocalDateTime.now()));
         Order save = orderRepo.save(order);
         return orderMapper.toDto(save);
     }
@@ -72,7 +75,7 @@ public class OrderService {
     public void deleteOrderById(int id) {
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public OrderDto deleteProductById(Long id) {
         Order orderNotFound = orderRepo.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found", HttpStatus.NOT_FOUND));

@@ -5,6 +5,7 @@ import ru.kashtanov.gratitude_service.dto.GratitudeCreateDto;
 import ru.kashtanov.gratitude_service.dto.GratitudeDto;
 import ru.kashtanov.gratitude_service.model.Gratitude;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -25,7 +26,7 @@ public class GratitudeMapperService {
 
     public Gratitude toEntity(GratitudeCreateDto dto) {
         var entity = new Gratitude();
-        entity.setTimestamp(LocalDateTime.now());
+        entity.setTimestamp(Instant.now());
         entity.setAuthorId(dto.getAuthorId());
         entity.setContent(dto.getContent());
         entity.setRecipientIds(dto.getRecipientIds());

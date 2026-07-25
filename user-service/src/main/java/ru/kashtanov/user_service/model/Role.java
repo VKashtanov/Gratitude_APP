@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.XSlf4j;
 import ru.kashtanov.user_service.model.join_tables.UsersRoles;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
  */
 @Entity
 @Getter
+@Setter
 @Table(name = "roles")
 @NoArgsConstructor
 public class Role {

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +20,6 @@ public class GratitudeDto {
     private Long authorId;
     private String content;
     private List<Long> recipientIds;
-    private LocalDateTime timestamp;
+    private Instant timestamp;
 
 }

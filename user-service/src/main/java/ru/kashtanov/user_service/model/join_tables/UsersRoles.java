@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.kashtanov.user_service.model.Role;
 import ru.kashtanov.user_service.model.User;
 
@@ -12,6 +13,7 @@ import ru.kashtanov.user_service.model.User;
  */
 @Entity
 @Getter
+@Setter
 @Table(name = "users_roles",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"}))
 @NoArgsConstructor
