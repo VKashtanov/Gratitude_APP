@@ -1,16 +1,14 @@
 package ru.kashtanov.auth_service.service;
 
-import lombok.NonNull;
-import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import ru.kashtanov.auth_service.dto.UserRegisterDto;
-import ru.kashtanov.auth_service.exception.UserDetailsException;
+import ru.kashtanov.auth_service.exception.UserValidationException;
 import ru.kashtanov.auth_service.util.ValidateService;
 
 import java.util.Set;
@@ -31,17 +29,20 @@ public class CustomedUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        ValidateService.validateUserName(username);
+        UserRegisterDto dto = null;
+        try {
+            Mono<UserRegisterDto> login = authApiService.fetchUserByLogin(username);
+            dto = login.block();
 
-        Mono<UserRegisterDto> login = authApiService.login(username);
-        UserRegisterDto dto = login.block();
-
-        ValidateService.validateUserRegisterDto(dto);
-        String username1 = dto.getUsername();
-        String password1 = dto.getPassword();
+            ValidateService.validateUserRegisterDto(dto,true);
+        } catch (UserValidationException ex) {
+            throw new BadCredentialsException("Bad credentials: " + ex.getMessage());
+        }
+        String login = dto.getUsername();
+        String password = dto.getPassword();
         Set<String> roles = dto.getRoles();
 
         Set<SimpleGrantedAuthority> setRoles = roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r)).collect(Collectors.toSet());
-        return new User(username1, password1, setRoles);
+        return new User(login, password, setRoles);
     }
 }

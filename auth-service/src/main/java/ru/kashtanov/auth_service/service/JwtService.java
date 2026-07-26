@@ -52,6 +52,7 @@ public class JwtService {
         log.info("JWT Service initialized successfully");
     }
 
+
     public String generateAccessToken(Authentication authentication) {
         String username = authentication.getName();
         Instant now = Instant.now();
@@ -70,6 +71,7 @@ public class JwtService {
                 .compact();
     }
 
+
     public String generateRefreshToken(String username) {
         Instant now = Instant.now();
         Instant expirationRefreshTokenDate = now.plusMillis(refreshExpirationDate);
@@ -87,6 +89,7 @@ public class JwtService {
         return extractAllClaims(token).getSubject();
     }
 
+
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSecretKey())
@@ -95,13 +98,18 @@ public class JwtService {
                 .getBody();
     }
 
+
     @SuppressWarnings("unchecked")
     public List<String> extractRoles(String token) {
-        return extractAllClaims(token).get("roles", List.class);
+        List<String> roles = extractAllClaims(token).get("roles", List.class);
+        return roles.stream()
+                .filter(role -> !role.startsWith("FACTOR"))
+                .collect(Collectors.toList());
     }
-     // does it must match
+
+
     private SecretKey getSecretKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)); // converts string to crypto graphic key
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
 
@@ -144,6 +152,4 @@ public class JwtService {
             return dto;
         }
     }
-
-
 }

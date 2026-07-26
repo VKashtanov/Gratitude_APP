@@ -5,19 +5,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.server.SecurityWebFilterChain;
+import ru.kashtanov.auth_service.auth_entry_point.CustomAuthenticationEntryPoint;
 import ru.kashtanov.auth_service.security.JwtAuthenticationFilter;
 
 /**
@@ -44,20 +42,23 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable) // TODO set later
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/vpn/**").authenticated()
+                                .requestMatchers("/api/vpn/**").hasAnyRole("USER", "ADMIN")
                                 .anyRequest().authenticated())
                 .sessionManagement(
                         (session) ->
                                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                );
         return http.build();
     }
 
-    //    - we prepare AuthenticationProvider for AuthenticationManager
+
     // STEP-4 Implement work with user data, encodes data
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -67,11 +68,8 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    // Authentication manger finds implimentation that is able to work with UserDetails
-    // userDetails we alredy cusstomed, it is a wrapper that contains data of user
-    // provider knows how to retrieve data, and how to encode them
-    // STEP_3  goes for provider
-    // AuthenticationManager uses AuthenticationProvider, which loads data from the database via UserDetailsService
+
+    // STEP_3   AuthenticationManager uses AuthenticationProvider, which loads data from the database via UserDetailsService
     // and verifies the password via PasswordEncoder
     @Bean
     public AuthenticationManager authenticationManager(

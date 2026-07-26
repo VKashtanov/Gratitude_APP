@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 /**
  * @author Viktor Кashtanov
  */
+
 // STEP_1  DispatcherServlet accept HTTP request and sends it to the filter chain
 // STEP_2  JwtAuthenticationFilter intercepts request before Controller
 @Slf4j
@@ -32,9 +33,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtService = jwtService;
     }
 
+
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        return path.startsWith("/api/auth/");
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    // STEP_3 Extract Token from the HEADER
+        // STEP_3 Extract Token from the HEADER
         String token = extractToken(request);
         if (token == null) {
             log.debug("No JWT token found in request: {}", request.getRequestURI());
@@ -87,8 +96,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // STEP_6 CREATING WRAPPER CLASS
         var authentication = new UsernamePasswordAuthenticationToken(userName, null, authorities);
 
-        // it is a container that lives within session,
-        // exist in one Thread, and dies when http request is done
+        // it is a container that lives within session, exists in one Thread, and dies when http request is done
         // STEP_7 SAVING IN SECURITY_CONTEXT, IN THREAD LOCAL
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
