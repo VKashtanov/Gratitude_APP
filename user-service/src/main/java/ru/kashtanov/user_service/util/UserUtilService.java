@@ -38,11 +38,10 @@ public class UserUtilService {
         return user;
     }
 
-    public static UserDtoResponseSaved toUserDtoResponseSaved(User user) {
-        var dto = new UserDtoResponseSaved();
-        dto.setId(user.getId());
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
+    public static UserRegisterDto toUserDtoResponseSaved(User user) {
+        var dto = new UserRegisterDto();
+        dto.setUsername(user.getUsername());
+        dto.setPassword(user.getPassword());
         dto.setEmail(user.getEmail());
         return dto;
     }
@@ -67,7 +66,7 @@ public class UserUtilService {
                 .map(ur->ur.getRole().getRoleName())
                 .collect(Collectors.toSet());
 
-        return new  UserRegisterDto(email, username, password,roles);
+        return new  UserRegisterDto(username, email, password,roles);
     }
 
 

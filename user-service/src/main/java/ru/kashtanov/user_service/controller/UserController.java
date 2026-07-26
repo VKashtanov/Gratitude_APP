@@ -22,7 +22,7 @@ import java.util.Map;
  * @author Viktor Кashtanov
  */
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDtoResponseSaved> createUser(@RequestBody UserRegisterDto dto) {
+    public ResponseEntity<UserRegisterDto> createUser(@RequestBody UserRegisterDto dto) {
         User user = userService.createUser(dto);
         var response = UserUtilService.toUserDtoResponseSaved(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

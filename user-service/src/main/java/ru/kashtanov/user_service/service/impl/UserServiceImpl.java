@@ -3,6 +3,7 @@ package ru.kashtanov.user_service.service.impl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.kashtanov.user_service.constants.ErrorMessages;
 import ru.kashtanov.user_service.dto.request.user.UserRegisterDto;
 import ru.kashtanov.user_service.dto.response.UserDeletedResponseDto;
 import ru.kashtanov.user_service.dto.response.UserDtoFieldsUpdatedResponse;
@@ -15,6 +16,7 @@ import ru.kashtanov.user_service.util.UserUtilService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -23,7 +25,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl {
-    private final UserUtilService utilUserService = new UserUtilService();
     private final UserRepo userRepo;
 
     public UserServiceImpl(UserRepo userRepo) {
@@ -39,13 +40,13 @@ public class UserServiceImpl {
             user.setEmail(dto.getEmail());
             return userRepo.save(user);
         } catch (DataIntegrityViolationException e) {
-            String message = e.getRootCause().getMessage();
+            String message = Objects.requireNonNull(e.getRootCause()).getMessage();
             if (message.contains("username")) {
-                throw new UserCrudException("Username '" + dto.getUsername() + "' is already taken");
+                throw new UserCrudException(dto.getUsername() + " " + ErrorMessages.USERNAME_IS_ALREADY_TAKEN);
             } else if (message.contains("email")) {
-                throw new UserCrudException("Email '" + dto.getEmail() + "' is already in use");
+                throw new UserCrudException(dto.getEmail() + " " + ErrorMessages.EMAIL_ALREADY_IN_USE);
             } else {
-                throw new UserCrudException("Failed to create user. Please check your data.");
+                throw new UserCrudException(ErrorMessages.FAILED_TO_CREATE_USER + " " + e.getMessage());
             }
         }
     }
