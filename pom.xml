@@ -34,28 +34,6 @@
         <junit.version>6.0.3</junit.version>
     </properties>
 
-    <!--    <dependencyManagement>-->
-    <!--        <dependencies>-->
-    <!--            <dependency>-->
-    <!--                <groupId>org.junit</groupId>-->
-    <!--                <artifactId>junit-bom</artifactId>-->
-    <!--                <version>${junit.version}</version>-->
-    <!--                <type>pom</type>-->
-    <!--                <scope>import</scope>-->
-    <!--            </dependency>-->
-
-    <!--            <dependency>-->
-    <!--                <groupId>io.github.cdimascio</groupId>-->
-    <!--                <artifactId>dotenv-java</artifactId>-->
-    <!--                <version>3.0.0</version>-->
-    <!--            </dependency>-->
-    <!--        </dependencies>-->
-    <!--    </dependencyManagement>-->
-    <dependencies>
-
-
-
-    </dependencies>
     <build>
         <plugins>
             <plugin>
