@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>ru.kashtanov</groupId>
 		<artifactId>gratitude_app</artifactId>
@@ -10,22 +11,27 @@
 
 	<artifactId>gateway-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<name>gateway-service</name>
+	<description>gateway-service description</description>
 
 	<properties>
 		<java.version>17</java.version>
 	</properties>
 
 	<dependencies>
+		<!-- WEB -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webmvc</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- TESTING -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
