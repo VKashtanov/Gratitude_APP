@@ -1,5 +1,5 @@
 server:
-  port:9050
+  port: 9050
 spring:
   application:
     name: order-service
@@ -12,9 +12,16 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       # value - turns value Java object into Json
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
       properties:
         #        do not add headers of class type
+        acks: all
+        retries: 3
+        enable.idempotence: true
         spring.json.add.type.headers: true
+
+
+
 
   datasource:
     url: jdbc:postgresql://localhost:5400/orders_db

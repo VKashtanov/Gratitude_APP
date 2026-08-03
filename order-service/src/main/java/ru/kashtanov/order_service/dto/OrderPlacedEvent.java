@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.security.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -18,5 +19,5 @@ public class OrderPlacedEvent {
     private Long orderId;
     private String userEmail;
     private Double orderPrice;
-    private String orderDate;
+    private Instant orderDate;
 }

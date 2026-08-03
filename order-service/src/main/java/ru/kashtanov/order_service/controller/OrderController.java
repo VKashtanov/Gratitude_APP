@@ -9,6 +9,7 @@ import ru.kashtanov.order_service.service.OrderProducerService;
 import ru.kashtanov.order_service.service.OrderService;
 
 import java.net.URI;
+import java.time.Instant;
 
 /**
  * @author Viktor Кashtanov
@@ -29,7 +30,13 @@ public class OrderController {
     //==================== Kafka PRODUCER ========================
     @PostMapping("/events/placed")
     public void placeOrder(@RequestBody OrderPlacedEvent event) {
+        if (event.getOrderDate() == null) {
+            event.setOrderDate(Instant.now());
+            System.out.println("DATA OF ORDER: " + event.getOrderDate());
+        }
+
         producerService.sendOrderPlacedEvent(event);
+
     }
 
 
