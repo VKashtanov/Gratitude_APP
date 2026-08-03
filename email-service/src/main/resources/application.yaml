@@ -28,4 +28,11 @@ spring:
       group-id: "notificationId"   # it's need for different consumers, types of  processor
       # like when we have notification for email, and notification by sms i would write
       # smsId and emailId
+
+      max-poll-records: 3  # batch size per poll
+      enable-auto-commit: false
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual  # is better since we're sure our messages are processed
+      type: batch
+      concurrency: 5   # each partition has its own thread
