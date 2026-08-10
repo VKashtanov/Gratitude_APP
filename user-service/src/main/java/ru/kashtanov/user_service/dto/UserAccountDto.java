@@ -1,11 +1,8 @@
 package ru.kashtanov.news_service.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.kashtanov.news_service.enums.NewsContentEnum;
-import ru.kashtanov.news_service.model.News;
+import ru.kashtanov.news_service.enums.AccaountTypeEnum;
 
 import java.math.BigDecimal;
 
@@ -14,14 +11,14 @@ import java.math.BigDecimal;
  */
 @Data
 @AllArgsConstructor
-public class NewsContentDto {
+public class UserAccountDto {
     private final Long id;
-    private final NewsContentEnum type;
+    private final AccaountTypeEnum type;
     private final String additional;
     private final BigDecimal balance;
 
 
-    public NewsContentDto(Builder builder) {
+    public UserAccountDto(Builder builder) {
         this.id = builder.id;
         this.type = builder.type;
         this.additional = builder.additional;
@@ -35,7 +32,7 @@ public class NewsContentDto {
 
     public static class Builder {
         private Long id;
-        private NewsContentEnum type;
+        private AccaountTypeEnum type;
         private String additional;
         private BigDecimal balance;
 
@@ -44,7 +41,7 @@ public class NewsContentDto {
             return this;
         }
 
-        public Builder type(NewsContentEnum type) {
+        public Builder type(AccaountTypeEnum type) {
             this.type = type;
             return this;
         }
@@ -59,8 +56,8 @@ public class NewsContentDto {
             return this;
         }
 
-        public NewsContentDto build() {
-            return new NewsContentDto(this);
+        public UserAccountDto build() {
+            return new UserAccountDto(this);
         }
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ru.kashtanov.news_service.model.NewsContent;
+import ru.kashtanov.news_service.model.UserAccount;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -16,7 +16,7 @@ import java.util.Optional;
  * @author Viktor Кashtanov
  */
 @Repository
-public interface NewsContentRepo extends JpaRepository<NewsContent, Long> {
+public interface UserAccountRepo extends JpaRepository<UserAccount, Long> {
 
 
     @Modifying
@@ -27,8 +27,8 @@ public interface NewsContentRepo extends JpaRepository<NewsContent, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE) //1. if you use native query add at the end "FOR UPDATE"  = SELECT * FROM news_content WHERE id = :id FOR UPDATE
     //2. JPQL   = SELECT nc FROM NewsContent nc WHERE nc.id= :id   + FOR UPDATE ; it adds under the hood
-    @Query("SELECT nc FROM NewsContent nc WHERE nc.id= :id")
-    Optional<NewsContent> findByPessimistic(@Param(value = "id") Long id);
+    @Query("SELECT nc FROM UserAccount nc WHERE nc.id= :id")
+    Optional<UserAccount> findByPessimistic(@Param(value = "id") Long id);
 
 
 }

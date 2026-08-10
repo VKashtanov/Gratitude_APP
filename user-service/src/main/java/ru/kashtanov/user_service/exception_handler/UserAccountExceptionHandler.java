@@ -1,11 +1,10 @@
-package ru.kashtanov.news_service.exception_handlers;
+package ru.kashtanov.user_service.exception_handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.kashtanov.news_service.dto.ErrorResponse;
-import ru.kashtanov.news_service.exceptions.NewsContentException;
 
 /**
  * @author Viktor Кashtanov

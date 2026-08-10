@@ -1,18 +1,18 @@
-package ru.kashtanov.news_service.enums;
+package ru.kashtanov.user_service.enums;
 
 /**
  * @author Viktor Кashtanov
  */
-public enum NewsContentEnum {
+public enum AccaountTypeEnum {
 
-    TEXT(1),
-    PICTURE(2),
-    VIDEO(3);
+    DEFAULT(1),
+    PERSONAL(2),
+    BUSINESS(3);
 
     private final int typeNum;
 
 
-    NewsContentEnum(int typeNum) {
+    AccaountTypeEnum(int typeNum) {
         this.typeNum = typeNum;
     }
 

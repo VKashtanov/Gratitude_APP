@@ -30,18 +30,13 @@ public class News {
     @Column(name = "user_id")
     private Long author;
 
-    //1. From News take news_id
-    //2. Go to NewsContent find its id
-    //3. Create column of biding with name
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "news_content_id", unique = true)
-    private NewsContent newsContent;
+    @OneToMany(mappedBy = "news")
+    private List<NewsContent> content;// take id of entity "content" and put it into join column "content_id"
 
     @ElementCollection
     @CollectionTable(
             name = "mentioned_users", // create a new table to store values
             joinColumns = @JoinColumn(name = "news_id")) // creates "news_id" column (foreign key)
-
     @Column(name = "user_id") // creates "user_id" column (stores the values)
     private List<Long> mentioned_users; //
 
