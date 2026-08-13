@@ -1,8 +1,8 @@
-package ru.kashtanov.news_service.model;
+package ru.kashtanov.news_service.model.join;
 
 import jakarta.persistence.*;
-
-import java.util.List;
+import ru.kashtanov.news_service.model.Content;
+import ru.kashtanov.news_service.model.News;
 
 /**
  * @author Viktor Кashtanov

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.kashtanov.news_service.model.join.NewsContent;
 
 import java.util.List;
 

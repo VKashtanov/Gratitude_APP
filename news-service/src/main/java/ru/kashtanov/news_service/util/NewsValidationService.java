@@ -2,6 +2,7 @@ package ru.kashtanov.news_service.util;
 
 import org.springframework.stereotype.Component;
 import ru.kashtanov.news_service.dto.NewsDto;
+import ru.kashtanov.news_service.exceptions.NewsCrudException;
 
 /**
  * @author Viktor Кashtanov
@@ -9,18 +10,18 @@ import ru.kashtanov.news_service.dto.NewsDto;
 @Component
 public class NewsValidationService {
 
-    public static void validateNewsCreation(NewsDto dto) {
+    public  void validateCommon(NewsDto dto) {
         if(dto==null){
-            throw new IllegalArgumentException("NewsDto is null");
+            throw new NewsCrudException("Dto is null");
         }
         if(dto.getAuthorId()==null){
-            throw new IllegalArgumentException("AuthorId is null");
+            throw new NewsCrudException("AuthorId is null");
         }
         if(dto.getTitle()==null || dto.getTitle().isBlank()){
-            throw new IllegalArgumentException("Title is null");
+            throw new NewsCrudException("Title is invalid: " + dto.getTitle());
         }
-        if(dto.getContent()==null || dto.getContent().isBlank()){
-            throw new IllegalArgumentException("Content is null");
+        if(dto.getContentIdList()==null){
+            throw new NewsCrudException("Content IDs list is null");
         }
     }
 }

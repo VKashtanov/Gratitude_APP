@@ -1,12 +1,12 @@
 package ru.kashtanov.news_service.model;
 
 import jakarta.persistence.*;
-import jdk.jfr.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.kashtanov.news_service.enums.ContentEnumType;
+import ru.kashtanov.news_service.model.join.NewsContent;
 
 import java.util.List;
 
