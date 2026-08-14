@@ -35,7 +35,6 @@ public class MinioService {
 
     // there are several main methods of working with MinioClient
     public String addFile(MultipartFile file) {
-        // validation
         if (file == null || file.getSize() <= 0) {
             throw new MinioS3CustomException("File can't be processed since it is empty");
         }
@@ -70,7 +69,6 @@ public class MinioService {
                 throw new MinioS3CustomException("Error upon uploading file");
             }
         });
-
         uploadFileFuture.whenComplete((result, error) -> {
             if (error != null) {
                 log.error("Error while adding file: ", error);
@@ -78,7 +76,7 @@ public class MinioService {
             try {
                 cps.close();
             } catch (IOException e) {
-                log.warn("⚠️ Failed to close stream: {}", e.getMessage());
+                log.warn("Failed to close stream: {}", e.getMessage());
             }
             log.info("Successfully added file: " + Instant.now());
         });

@@ -17,7 +17,7 @@ public class MinioS3CustomExceptionHandler {
     @ExceptionHandler(MinioS3CustomException.class)
     public ResponseEntity<ErrorResponse> handleMinioS3CustomException(MinioS3CustomException e) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        return ResponseEntity.ok().body(
+        return ResponseEntity.badRequest().body(
                 ErrorResponse.builder()
                         .status(status.value())
                         .message("MinioS3 exception is occurred")

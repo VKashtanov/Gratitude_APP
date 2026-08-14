@@ -24,7 +24,7 @@ public class NewsController {
         this.minioService = minioService;
         this.redisService = redisService;
     }
-
+    // S3 interaction API
     @PostMapping("/content")
     public ResponseEntity<?> createMedia(@RequestParam("file") MultipartFile file) {
         String string = minioService.addFile(file);
@@ -36,6 +36,13 @@ public class NewsController {
     public ResponseEntity<String> fetchLoadPercentage(@RequestParam(name = "file_name") String fileName) {
         String string = redisService.fetchPercentageFromRedis(fileName);
         return ResponseEntity.ok().body(string);
+
+    }
+
+    @DeleteMapping("/percent")
+    public ResponseEntity<String> deleteLoadPercentage(@RequestParam(name = "file_name") String fileName) {
+        redisService.deletePercentageFromRedis(fileName);
+        return ResponseEntity.noContent().build();
 
     }
 
