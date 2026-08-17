@@ -1,14 +1,18 @@
 package ru.kashtanov.news_service.service;
 
+import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.errors.*;
+import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.kashtanov.news_service.config.ComputingPercentageStream;
 import ru.kashtanov.news_service.exceptions.MinioS3CustomException;
 import ru.kashtanov.news_service.inits.BucketInitializer;
+import ru.kashtanov.news_service.repo.ContentRepo;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -26,22 +30,25 @@ public class MinioService {
     private final MinioClient minioClient;
     private final BucketInitializer bucketInitializr;
     private final RedisService redisService;
+    private final ContentRepo contentRepo;
 
-    public MinioService(MinioClient minioClient, BucketInitializer bucketInitializr, RedisService redisService) {
+
+    public MinioService(MinioClient minioClient, BucketInitializer bucketInitializr, RedisService redisService, ContentRepo contentRepo) {
         this.minioClient = minioClient;
         this.bucketInitializr = bucketInitializr;
         this.redisService = redisService;
+        this.contentRepo = contentRepo;
     }
 
-    // there are several main methods of working with MinioClient
-    public String addFile(MultipartFile file) {
+    @Transactional
+    public String uploadMedia(MultipartFile file) {
         if (file == null || file.getSize() <= 0) {
             throw new MinioS3CustomException("File can't be processed since it is empty");
         }
         String fileName = formName(file);
         String bucketName = bucketInitializr.getBucketName();
         try {
-            uploadFile(file, fileName, bucketName);
+            addMedia(file, fileName, bucketName);
         } catch (IOException e) {
             throw new MinioS3CustomException("Impossible to add file");
         }
@@ -49,7 +56,8 @@ public class MinioService {
 
     }
 
-    private void uploadFile(MultipartFile file, String fileName, String bucketName) throws IOException {
+    @Transactional
+    public void addMedia(MultipartFile file, String fileName, String bucketName) throws IOException {
         var cps = new ComputingPercentageStream(redisService, file.getInputStream(), file.getSize(), fileName);
 
         CompletableFuture<?> uploadFileFuture = CompletableFuture.runAsync(() -> {
@@ -71,6 +79,7 @@ public class MinioService {
         });
         uploadFileFuture.whenComplete((result, error) -> {
             if (error != null) {
+                contentRepo.deleteByStoredFilename(fileName);
                 log.error("Error while adding file: ", error);
             }
             try {
@@ -80,6 +89,24 @@ public class MinioService {
             }
             log.info("Successfully added file: " + Instant.now());
         });
+
+    }
+
+    public String getLinkForContent(String fileName) {
+        try {
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .bucket(bucketInitializr.getBucketName())
+                            .object(fileName)
+                            .expiry(1, TimeUnit.DAYS)
+                            .method(Method.GET)
+                            .build());
+        } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException |
+                 InvalidResponseException | IOException | NoSuchAlgorithmException | XmlParserException |
+                 ServerException e) {
+
+            throw new MinioS3CustomException("Error while getting presigned object url");
+        }
 
     }
 

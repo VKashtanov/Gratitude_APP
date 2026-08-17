@@ -8,6 +8,7 @@ import lombok.Setter;
 import ru.kashtanov.news_service.enums.ContentEnumType;
 import ru.kashtanov.news_service.model.join.NewsContent;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -25,8 +26,11 @@ public class Content {
     @SequenceGenerator(name = "content_factory", sequenceName = "content_id_factory", allocationSize = 1)
     private Long id;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "original_file_name")
+    private String originalFileName;
+
+    @Column(name = "stored_file_name")
+    private String storedFileName;
 
     @Column(name = "content_info")
     private String info;
@@ -36,6 +40,12 @@ public class Content {
 
     @Column(name = "creator_id")
     private Long creatorId;
+
+    @Column(name="creation_date")
+    private Instant creationDate;
+
+    @Column(name = "size")
+    private Long size;
 
     @OneToMany(mappedBy = "content")
     private List<NewsContent> content;
