@@ -1,0 +1,26 @@
+server:
+  port: 9995
+spring:
+  application:
+    name: subscription-service
+
+  datasource:
+    username: ${MY_POSTGRES_USER}
+    password: ${MY_POSTGRES_PASSWORD}
+    url: ${GA_MY_POSTGRES_ENDPOINT}/subscriptions_db
+    driver-class-name: org.postgresql.Driver
+
+
+  jpa:
+
+    properties:
+      hibernate:
+        default_schema: public
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+
+    hibernate:
+      ddl-auto: update
+
+
+
