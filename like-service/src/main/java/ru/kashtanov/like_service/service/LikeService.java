@@ -54,7 +54,7 @@ public class LikeService {
         return mapperService.toDto(save);
     }
 
-    // To delete like i have to make several operations
+    // Todo delete like i have to make several operations
     //
     @Transactional
     public LikeDto deleteLike(LikeDto dto) {

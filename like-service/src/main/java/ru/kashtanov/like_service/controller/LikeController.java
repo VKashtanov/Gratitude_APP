@@ -32,7 +32,7 @@ public class LikeController {
 
 // only user that left comment is able to delete it
     @DeleteMapping
-    public ResponseEntity<LikeDto> deleteLike(LikeSaveDto likeSaveDto) {
+    public ResponseEntity<LikeDto> deleteLike(LikeDto likeSaveDto) {
         LikeDto likeDto = likeService.deleteLike(likeSaveDto);
         return ResponseEntity.ok(likeDto);
     }
