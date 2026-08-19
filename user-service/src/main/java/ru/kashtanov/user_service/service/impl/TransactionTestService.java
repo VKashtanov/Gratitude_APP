@@ -1,8 +1,8 @@
-package ru.kashtanov.news_service.service;
+package ru.kashtanov.user_service.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.kashtanov.news_service.dto.UserAccountDto;
+import ru.kashtanov.user_service.dto.UserAccountDto;
 
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;

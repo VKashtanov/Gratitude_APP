@@ -3,7 +3,7 @@ package ru.kashtanov.user_service.enums;
 /**
  * @author Viktor Кashtanov
  */
-public enum AccaountTypeEnum {
+public enum AccountTypeEnum {
 
     DEFAULT(1),
     PERSONAL(2),
@@ -12,7 +12,7 @@ public enum AccaountTypeEnum {
     private final int typeNum;
 
 
-    AccaountTypeEnum(int typeNum) {
+    AccountTypeEnum(int typeNum) {
         this.typeNum = typeNum;
     }
 

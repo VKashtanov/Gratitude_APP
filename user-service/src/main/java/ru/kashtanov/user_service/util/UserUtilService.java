@@ -74,6 +74,7 @@ public class UserUtilService {
         var dto = new UserDtoResponseDetailed();
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
+        dto.setUsername(user.getUsername());
         dto.setLastName(user.getLastName());
         dto.setMiddleName(user.getMiddleName());
         dto.setPosition(user.getPosition());

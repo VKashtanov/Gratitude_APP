@@ -37,6 +37,9 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @OneToMany(mappedBy = "user")
+    private List<UsersRoles> usersRoles;
+
     // Other fields
     @Column(name = "firstname")
     private String firstName;
@@ -68,9 +71,6 @@ public class User {
 
     @Column(name = "country")
     private String country;
-
-    @OneToMany(mappedBy = "user")
-    private List<UsersRoles> usersRoles;
 
     @Column(name = "active")
     private boolean active = true;

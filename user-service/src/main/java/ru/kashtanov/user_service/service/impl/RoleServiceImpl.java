@@ -2,6 +2,7 @@ package ru.kashtanov.user_service.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kashtanov.user_service.dto.response.RoleResponseDto;
 import ru.kashtanov.user_service.dto.request.role.RoleDto;
 import ru.kashtanov.user_service.exception.role_exceptions.RoleCrudOperationsException;
@@ -17,12 +18,15 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class RoleServiceImpl {
+    private final TestService testService;
     private final RoleRepo roleRepo;
 
-    public RoleServiceImpl(RoleRepo roleRepo) {
+    public RoleServiceImpl(TestService testService, RoleRepo roleRepo) {
+        this.testService = testService;
         this.roleRepo = roleRepo;
     }
 
+    @Transactional
     public Role findRoleById(Long id) {
         Optional<Role> role = roleRepo.findById(id);
         if (role.isEmpty()) {
@@ -31,7 +35,7 @@ public class RoleServiceImpl {
         return role.get();
     }
 
-
+    @Transactional
     public RoleResponseDto createRole(String roleName) {
         if (roleName == null || roleName.isBlank()) {
             throw new RoleCrudOperationsException("Role name cannot be empty");
@@ -40,13 +44,15 @@ public class RoleServiceImpl {
         if (optionalRole.isPresent()) {
             throw new RoleCrudOperationsException("Can't create a role with the name " + roleName + " already exists");
         }
-        roleRepo.save(new Role(roleName));
+        Role save = roleRepo.save(new Role(roleName));
         var createdDto = new RoleResponseDto();
-        createdDto.setRoleName(roleName);
+
+        createdDto.setRoleName(save.getRoleName());
         log.info("Role created: {}", createdDto);
         return createdDto;
     }
 
+    @Transactional
     public RoleDto deleteRoleyId(Long id) {
         if (id == null) {
             throw new RoleCrudOperationsException("Id cannot be null");

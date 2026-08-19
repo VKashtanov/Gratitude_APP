@@ -31,12 +31,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserRegisterDto> createUser(@RequestBody UserRegisterDto dto) {
-        User user = userService.createUser(dto);
-        var response = UserUtilService.toUserDtoResponseSaved(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
+
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserDtoResponseDetailed> getUserById(@PathVariable Long userId) {
@@ -62,7 +57,7 @@ public class UserController {
     public ResponseEntity<UserDeletedResponseDto> deleteById(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUserById(userId));
     }
-
+// todo - to implement via index number users getting
 //    @GetMapping
 //    public List<UserDtoResponseDetailed> getAllUsers(Pageable pageable) {
 //        return userService.findAllUsers(pageable);

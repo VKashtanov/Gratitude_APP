@@ -1,13 +1,14 @@
-package ru.kashtanov.news_service.service;
+package ru.kashtanov.user_service.service.impl;
 
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kashtanov.news_service.dto.UserAccountDto;
-import ru.kashtanov.news_service.exceptions.NewsContentException;
-import ru.kashtanov.news_service.model.UserAccount;
-import ru.kashtanov.news_service.repo.UserAccountRepo;
+import ru.kashtanov.user_service.dto.UserAccountDto;
+import ru.kashtanov.user_service.exception.user_account_exception.UserAccountException;
+import ru.kashtanov.user_service.model.UserAccount;
+import ru.kashtanov.user_service.repository.UserAccountRepo;
+
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public class UserAccountService {
     public UserAccountDto updateBalanceViaPessimisticLock(Long id, Float sum) {
         // to select
         BigDecimal amount = BigDecimal.valueOf(sum);
-        UserAccount nc = userAccountRepo.findByPessimistic(id).orElseThrow(() -> new NewsContentException("Pessimistic locked by NewsContent"));
+        UserAccount nc = userAccountRepo.findByPessimistic(id).orElseThrow(() -> new UserAccountException("Pessimistic locked by NewsContent"));
         // to process and update
         BigDecimal updatedBalance = nc.getBalance().add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
         nc.setBalance(updatedBalance);
@@ -82,7 +83,7 @@ public class UserAccountService {
     public UserAccountDto updateBalanceViaOptimisticLock(Long id, Float sum) {
         // to select
         BigDecimal amount = BigDecimal.valueOf(sum);
-        UserAccount nc = userAccountRepo.findByPessimistic(id).orElseThrow(() -> new NewsContentException("Pessimistic locked by NewsContent"));
+        UserAccount nc = userAccountRepo.findByPessimistic(id).orElseThrow(() -> new UserAccountException("Pessimistic locked by NewsContent"));
         // to process and update
         BigDecimal updatedBalance = nc.getBalance().add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
         nc.setBalance(updatedBalance);

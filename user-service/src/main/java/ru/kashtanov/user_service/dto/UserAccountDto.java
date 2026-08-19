@@ -1,8 +1,8 @@
-package ru.kashtanov.news_service.dto;
+package ru.kashtanov.user_service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.kashtanov.news_service.enums.AccaountTypeEnum;
+import ru.kashtanov.user_service.enums.AccountTypeEnum;
 
 import java.math.BigDecimal;
 
@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class UserAccountDto {
     private final Long id;
-    private final AccaountTypeEnum type;
+    private final AccountTypeEnum type;
     private final String additional;
     private final BigDecimal balance;
 
@@ -32,7 +32,7 @@ public class UserAccountDto {
 
     public static class Builder {
         private Long id;
-        private AccaountTypeEnum type;
+        private AccountTypeEnum type;
         private String additional;
         private BigDecimal balance;
 
@@ -41,7 +41,7 @@ public class UserAccountDto {
             return this;
         }
 
-        public Builder type(AccaountTypeEnum type) {
+        public Builder type(AccountTypeEnum type) {
             this.type = type;
             return this;
         }

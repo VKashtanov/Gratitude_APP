@@ -1,8 +1,8 @@
-package ru.kashtanov.news_service.model;
+package ru.kashtanov.user_service.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.kashtanov.news_service.enums.AccaountTypeEnum;
+import ru.kashtanov.user_service.enums.AccountTypeEnum;
 
 import java.math.BigDecimal;
 
@@ -23,16 +23,13 @@ public class UserAccount {
     private Long id;
 
     @Column(name = "type")
-    private AccaountTypeEnum type;
+    private AccountTypeEnum type;
 
     @Column( scale = 2)
     private BigDecimal balance;
 
     @Column(name = "additional", unique = true)
     private String additional;
-
-    @OneToOne(mappedBy = "userAccount")
-    private News news;
 
     @Version
     private Long version;

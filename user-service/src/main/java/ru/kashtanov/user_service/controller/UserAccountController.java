@@ -1,17 +1,18 @@
-package ru.kashtanov.news_service.controller;
+package ru.kashtanov.user_service.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kashtanov.news_service.dto.UserAccountDto;
-import ru.kashtanov.news_service.service.UserAccountService;
-import ru.kashtanov.news_service.service.TransactionTestService;
+import ru.kashtanov.user_service.dto.UserAccountDto;
+import ru.kashtanov.user_service.service.impl.TransactionTestService;
+import ru.kashtanov.user_service.service.impl.UserAccountService;
+
 
 /**
  * @author Viktor Кashtanov
  */
 @RestController
-@RequestMapping("/api/news_content")
+@RequestMapping("/api/user_account")
 public class UserAccountController {
     private final UserAccountService userAccountService;
     private final TransactionTestService testService;

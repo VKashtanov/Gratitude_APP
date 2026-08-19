@@ -11,6 +11,7 @@ public class UserDtoResponseDetailed {
     private String firstName;
     private String middleName;
     private String lastName;
+    private String username;
     private String position;
     private String portraitUrl;
     private String email;
