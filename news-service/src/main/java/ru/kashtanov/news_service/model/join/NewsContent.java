@@ -13,6 +13,8 @@ import ru.kashtanov.news_service.model.News;
 })
 public class NewsContent {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "news_content_factory")
+    @SequenceGenerator(name ="news_content_factory",sequenceName = "news_content_id_factory")
     private Long id;
 
     // Relationship fields
