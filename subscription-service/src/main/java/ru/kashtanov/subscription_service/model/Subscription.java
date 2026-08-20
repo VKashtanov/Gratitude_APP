@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.kashtanov.subscription_service.enums.SubscriptionEnumStatus;
+import ru.kashtanov.subscription_service.enums.SubscriptionEnumType;
 
 import java.time.Instant;
 
@@ -23,13 +24,30 @@ public class Subscription {
     @Id
     @GeneratedValue(generator = "subscription_factory")
     @SequenceGenerator(name = "subscription_factory", sequenceName = "subscription_id_factory")
+    @Column(name = "id")
     private Long id;
-    private String userId;
-    private String targetId;
-    private String type;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "target_id")
+    private Long targetId;
+
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private SubscriptionEnumType type;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private SubscriptionEnumStatus status;
+
+    @Column(name = "created_at")
     private Instant createdAt;
+
+    @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @Column(name = "expires_at")
     private Instant expiresAt;
 
 }
