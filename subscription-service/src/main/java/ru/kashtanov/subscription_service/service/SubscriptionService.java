@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kashtanov.subscription_service.constants.SubscriptionConstant;
 import ru.kashtanov.subscription_service.dto.PaginatedResponse;
 import ru.kashtanov.subscription_service.dto.SubscriptionDto;
 import ru.kashtanov.subscription_service.exceptions.SubscriptionCrudException;
@@ -48,21 +49,27 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public List<SubscriptionDto> fetchByUserId(Long userId, Long cursor, Long limit) {
+    public PaginatedResponse fetchByUserId(Long userId, Long cursor, Long limit) {
         if (userId == null) throw new SubscriptionCrudException("User ID is null");
+        Long safeLimit = limit == null ? SubscriptionConstant.DEFAULT_LIMIT : limit;
 
-        List<Subscription> list = repo.findByUserId(userId, cursor, limit);
-        return list.stream()
-                .map(builderService::buildDto).toList();
+        List<Subscription> list = repo.findByUserId(userId, cursor, safeLimit+1);
+        return getPaginatedResponse(safeLimit, list);
     }
+
 
     @Transactional
     public PaginatedResponse fetchByTargetId(Long targetId, Long cursor, Long limit) {
         if (targetId == null) throw new SubscriptionCrudException("Target ID is null");
+        Long safeLimit = limit == null ? SubscriptionConstant.DEFAULT_LIMIT : limit;
+
+        List<Subscription> list = repo.findByTargetId(targetId, cursor, safeLimit + 1);
+        return getPaginatedResponse(safeLimit, list);
+    }
+
+    private PaginatedResponse getPaginatedResponse(Long limit, List<Subscription> list) {
         Long nextCursor = null;
         boolean hasMore = false;
-
-        List<Subscription> list = repo.findByTargetId(targetId, cursor, limit + 1);
         if (list.isEmpty()) {
             return new PaginatedResponse();
         } else if (limit < list.size()) {
@@ -72,6 +79,7 @@ public class SubscriptionService {
         List<SubscriptionDto> subs = list.stream().map(builderService::buildDto)
                 .limit(limit)
                 .toList();
+
         return builderService.buildPaginatedResponse(subs, nextCursor, hasMore);
     }
 
