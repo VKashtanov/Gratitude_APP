@@ -23,7 +23,7 @@ public class Subscription {
 
     @Id
     @GeneratedValue(generator = "subscription_factory")
-    @SequenceGenerator(name = "subscription_factory", sequenceName = "subscription_id_factory")
+    @SequenceGenerator(name = "subscription_factory", sequenceName = "subscription_id_factory", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -49,5 +49,8 @@ public class Subscription {
 
     @Column(name = "expires_at")
     private Instant expiresAt;
+
+    @Version
+    private Long version;
 
 }

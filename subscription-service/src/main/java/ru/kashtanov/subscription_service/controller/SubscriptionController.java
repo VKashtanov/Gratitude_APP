@@ -6,6 +6,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.kashtanov.subscription_service.dto.PaginatedResponse;
 import ru.kashtanov.subscription_service.dto.SubscriptionDto;
 import ru.kashtanov.subscription_service.service.SubscriptionService;
 
@@ -40,15 +41,18 @@ public class SubscriptionController {
     @GetMapping("/user/{id}")
     public List<SubscriptionDto> findSubscriptionsByUserId(
             @PathVariable(name = "id") Long userId,
-            @RequestParam(name = "cursor") int cursor,
-            @RequestParam(name = "limit") int limit) {
+            @RequestParam(name = "cursor") Long cursor,
+            @RequestParam(name = "limit") Long limit) {
         return subscriptionService.fetchByUserId(userId, cursor, limit);
     }
 
     @GetMapping("/target/{id}")
-    public List<SubscriptionDto> findSubscriptionsByTargetId(@PathVariable(name = "id") Long targetId) {
-        return subscriptionService.fetchByTargetId(targetId);
-
+    public ResponseEntity<PaginatedResponse> findSubscriptionsByTargetId(
+            @PathVariable(name = "id") Long targetId,
+            @RequestParam(required = false, name = "cursor") Long cursor,
+            @RequestParam(name = "limit", defaultValue = "10") Long limit) {
+        PaginatedResponse response = subscriptionService.fetchByTargetId(targetId, cursor, limit);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/all")

@@ -19,20 +19,25 @@ import java.util.concurrent.Flow;
 @Repository
 public interface SubscriptionRepo extends CrudRepository<Subscription, Long> {
 
-    // Mixed with pageable to add to JPQL function of LIMIT and to form SQL QUERY
     @Query("SELECT s FROM Subscription s " +
             "WHERE s.userId = :userId " +
             "AND (:cursor IS NULL OR s.id > :cursor) " +
             "ORDER BY s.id ASC " +
             "LIMIT :limit")
-    List<Subscription> findByUserId(
-            @Param("userId") Long userId,
-            @Param("cursor") Long cursor,
-            @Param("limit") int limit
-    );
+    List<Subscription> findByUserId(@Param("userId") Long userId,
+                                    @Param("cursor") Long cursor,
+                                    @Param("limit") Long limit);
 
 
-    @Query("SELECT s FROM Subscription  s WHERE s.targetId =: target_id")
-    List<Subscription> findByTargetId(@Param("target_id") Long targetId);
+
+    @Query("SELECT s FROM Subscription  s " +
+            "WHERE s.targetId = :targetId " +
+            "AND (:cursor IS NULL OR s.id>:cursor)" +
+            "ORDER BY s.id ASC " +
+            "LIMIT :limit")
+    List<Subscription> findByTargetId(@Param("targetId") Long targetId,
+                                      @Param("cursor") Long cursor,
+                                      @Param("limit") Long limit);
+
 
 }
