@@ -40,7 +40,7 @@ public class MinioService {
         this.contentRepo = contentRepo;
     }
 
-    @Transactional
+
     public String uploadMedia(MultipartFile file) {
         if (file == null || file.getSize() <= 0) {
             throw new MinioS3CustomException("File can't be processed since it is empty");
@@ -56,9 +56,9 @@ public class MinioService {
 
     }
 
-    @Transactional
+
     public void addMedia(MultipartFile file, String fileName, String bucketName) throws IOException {
-        var cps = new ComputingPercentageStream(redisService, file.getInputStream(), file.getSize(), fileName);
+        var inputStream = new ComputingPercentageStream(redisService, file.getInputStream(), file.getSize(), fileName);
 
         CompletableFuture<?> uploadFileFuture = CompletableFuture.runAsync(() -> {
             try {
@@ -67,7 +67,7 @@ public class MinioService {
                                 .bucket(bucketName)
                                 .object(fileName)
                                 .contentType(file.getContentType())
-                                .stream(cps, file.getSize(), -1)
+                                .stream(inputStream, file.getSize(), -1)
                                 .build());
 
             } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException |
@@ -83,7 +83,7 @@ public class MinioService {
                 log.error("Error while adding file: ", error);
             }
             try {
-                cps.close();
+                inputStream.close();
             } catch (IOException e) {
                 log.warn("Failed to close stream: {}", e.getMessage());
             }
