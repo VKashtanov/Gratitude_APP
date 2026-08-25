@@ -34,9 +34,7 @@ public class OrderController {
             event.setOrderDate(Instant.now());
             System.out.println("DATA OF ORDER: " + event.getOrderDate());
         }
-
         producerService.sendOrderPlacedEvent(event);
-
     }
 
 

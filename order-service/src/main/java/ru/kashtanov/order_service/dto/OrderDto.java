@@ -20,4 +20,8 @@ public class OrderDto {
     private OrderStatus status;
     private Instant createdAt;
     private Instant finishedAt;
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 }
