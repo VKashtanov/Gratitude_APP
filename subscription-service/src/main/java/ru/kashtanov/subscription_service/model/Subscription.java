@@ -16,11 +16,10 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
-@Table(name = "subscriptions")
+@Table(name = "subscriptions", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "target_id"})})
 @NoArgsConstructor
 @AllArgsConstructor
 public class Subscription {
-
     @Id
     @GeneratedValue(generator = "subscription_factory")
     @SequenceGenerator(name = "subscription_factory", sequenceName = "subscription_id_factory", allocationSize = 1)

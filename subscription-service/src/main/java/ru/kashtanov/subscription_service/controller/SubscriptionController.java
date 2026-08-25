@@ -53,7 +53,8 @@ public class SubscriptionController {
     }
 
     @GetMapping("/all")
-    public List<SubscriptionDto> findAllSubscriptions(@PageableDefault Pageable pageable) {
+    public ResponseEntity<PaginatedResponse> findAllSubscriptions(@RequestParam(required = false, name = "cursor") Long cursor,
+                                                                  @RequestParam(name = "limit", defaultValue = "10") Long limit) {
         return null;
     }
 

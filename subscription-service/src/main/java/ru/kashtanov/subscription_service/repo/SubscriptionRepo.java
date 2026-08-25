@@ -29,7 +29,6 @@ public interface SubscriptionRepo extends CrudRepository<Subscription, Long> {
                                     @Param("limit") Long limit);
 
 
-
     @Query("SELECT s FROM Subscription  s " +
             "WHERE s.targetId = :targetId " +
             "AND (:cursor IS NULL OR s.id>:cursor)" +
@@ -38,6 +37,11 @@ public interface SubscriptionRepo extends CrudRepository<Subscription, Long> {
     List<Subscription> findByTargetId(@Param("targetId") Long targetId,
                                       @Param("cursor") Long cursor,
                                       @Param("limit") Long limit);
+
+    @Query("SELECT EXISTS(SELECT 1 FROM Subscription s " +
+            "WHERE s.targetId= :targetId AND s.userId= :userId)")
+    boolean existsByTargetIdAndUserId(@Param("targetId") Long targetId,
+                                      @Param("userId") Long userId);
 
 
 }

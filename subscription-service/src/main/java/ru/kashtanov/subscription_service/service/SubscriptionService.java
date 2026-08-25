@@ -1,5 +1,6 @@
 package ru.kashtanov.subscription_service.service;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,10 @@ public class SubscriptionService {
     @Transactional
     public SubscriptionDto create(SubscriptionDto dto) {
         validationService.validateCommon(dto);
+        boolean exists = repo.existsByTargetIdAndUserId(dto.getTargetId(), dto.getUserId());
+        if (exists) {
+            throw new SubscriptionCrudException("Subscription already exists with userId " + dto.getUserId() + " and targetId " + dto.getTargetId());
+        }
         Subscription subscription = builderService.buildSubscription(dto);
         Subscription saved = repo.save(subscription);
         return builderService.buildDto(saved);
@@ -53,7 +58,7 @@ public class SubscriptionService {
         if (userId == null) throw new SubscriptionCrudException("User ID is null");
         Long safeLimit = limit == null ? SubscriptionConstant.DEFAULT_LIMIT : limit;
 
-        List<Subscription> list = repo.findByUserId(userId, cursor, safeLimit+1);
+        List<Subscription> list = repo.findByUserId(userId, cursor, safeLimit + 1);
         return getPaginatedResponse(safeLimit, list);
     }
 
