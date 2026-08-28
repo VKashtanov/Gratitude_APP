@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Viktor Кashtanov
  */
 @WebMvcTest(SubscriptionController.class)
-class SubscriptionControllerTest {
+class SubscriptionControllerCreateTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -70,5 +70,6 @@ class SubscriptionControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Subscription CRUD exception"));
         verify(subscriptionService, times(1)).create(any(SubscriptionDto.class));
+
     }
 }

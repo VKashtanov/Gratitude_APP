@@ -38,6 +38,7 @@ public interface SubscriptionRepo extends CrudRepository<Subscription, Long> {
                                       @Param("cursor") Long cursor,
                                       @Param("limit") Long limit);
 
+
     @Query("SELECT EXISTS(SELECT 1 FROM Subscription s " +
             "WHERE s.targetId= :targetId AND s.userId= :userId)")
     boolean existsByTargetIdAndUserId(@Param("targetId") Long targetId,
