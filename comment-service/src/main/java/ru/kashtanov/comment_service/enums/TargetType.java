@@ -3,7 +3,7 @@ package ru.kashtanov.comment_service.enums;
 /**
  * @author Viktor Кashtanov
  */
-public enum EntityType {
+public enum TargetType {
     GRATITUDE,
     NEWS,
     COMMENT
