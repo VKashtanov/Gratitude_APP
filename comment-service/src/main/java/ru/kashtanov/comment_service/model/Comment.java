@@ -16,7 +16,9 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "comment")
+@Table(name = "comment",uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id","target_id","entity_type"})
+})
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_factory")
@@ -24,13 +26,13 @@ public class Comment {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_id")
-    private Long user_id;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @Column(name = "target_id")
+    @Column(name = "target_id", nullable = false)
     private Long targetId;
 
-    @Column(name = "entity_type")
+    @Column(name = "entity_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private TargetType targetType;
 

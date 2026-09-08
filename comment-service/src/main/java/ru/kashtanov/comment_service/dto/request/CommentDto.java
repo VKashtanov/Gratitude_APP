@@ -1,6 +1,7 @@
 package ru.kashtanov.comment_service.dto.request;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.kashtanov.comment_service.enums.TargetType;
@@ -11,6 +12,7 @@ import java.util.Objects;
  * @author Viktor Кashtanov
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentDto {
