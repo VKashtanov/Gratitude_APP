@@ -153,7 +153,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(
                 new ErrorResponse.Builder()
                         .message("Internal server error")
-                        .error("An unexpected error occurred")
+                        .error(ex.getLocalizedMessage())
                         .status(status.value())
                         .build()
         );
