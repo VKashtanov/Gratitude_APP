@@ -1,4 +1,4 @@
-package ru.kashtanov.comment_service.dto.request;
+package ru.kashtanov.comment_service.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +19,8 @@ public class CommentDto {
     private Long id;
     private TargetType targetType;
     private String comment;
+    private String header;
+    private String description;
     private Long targetId;
     private Long user_id;
 

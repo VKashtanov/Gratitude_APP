@@ -27,25 +27,35 @@ public abstract interface CommentRepo extends CrudRepository<Comment, Long> {
                                            @Param(value = "targetType") TargetType targetType);
 
 
+
     @Query("SELECT c FROM Comment c " +
             "WHERE c.userId=:userId " +
             "AND (:cursor IS NULL OR :cursor < c.id) " +
-            "ORDER BY c.id ASC "+
-            "LIMIT :limit"
-    )
+            "ORDER BY c.id ASC " +
+            "LIMIT :limit")
     public List<Comment> findByUserId(@Param(value = "userId") Long userId,
                                       @Param(value = "cursor") Long cursor,
                                       @Param(value = "limit") Long limit);
 
+
+
     @Query("SELECT c FROM Comment c " +
             "WHERE c.targetId=:targetId " +
             "AND (:cursor IS NULL OR :cursor < c.id) " +
-            "ORDER BY c.id ASC "+
-            "LIMIT :limit"
-    )
+            "ORDER BY c.id ASC " +
+            "LIMIT :limit")
     public List<Comment> findByTargetId(@Param(value = "targetId") Long targetId,
-                                      @Param(value = "cursor") Long cursor,
-                                      @Param(value = "limit") Long limit);
+                                        @Param(value = "cursor") Long cursor,
+                                        @Param(value = "limit") Long limit);
+
+
+
+    @Query("SELECT c FROM Comment c " +
+            "WHERE(:cursor IS NULL OR :cursor < c.id) " +
+            "ORDER BY c.id ASC " +
+            "LIMIT :limit")
+    public List<Comment> findAllComments(@Param(value = "cursor") Long cursor,
+                                         @Param(value = "limit") Long limit);
 
 
     // PESSIMISTIC_WRITE - add "FOR UPDATE"- read the row, to change it immediately

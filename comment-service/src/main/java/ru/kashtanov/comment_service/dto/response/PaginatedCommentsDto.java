@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.kashtanov.comment_service.dto.request.CommentDto;
 
 import java.util.List;
 import java.util.Objects;

@@ -1,5 +1,6 @@
 package ru.kashtanov.comment_service.dto.request;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -26,6 +27,10 @@ public class CommentCreateRequest {
     @NotNull(message = "Comment must not be Null")
     @NotBlank(message = "Comment must not be blank")
     private String comment;
+
+    private String header;
+
+    private String description;
 
     @NotNull(message = "Target ID must not be Null")
     private Long targetId;

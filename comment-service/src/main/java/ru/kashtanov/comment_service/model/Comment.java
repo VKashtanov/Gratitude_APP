@@ -16,9 +16,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "comment",uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id","target_id","entity_type"})
-})
+@Table(name = "comment")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_factory")
@@ -38,6 +36,12 @@ public class Comment {
 
     @Column(name = "comment")
     private String comment;
+
+    @Column(name = "header")
+    private String header;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
