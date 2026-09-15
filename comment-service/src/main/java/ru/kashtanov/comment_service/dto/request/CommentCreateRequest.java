@@ -28,15 +28,23 @@ public class CommentCreateRequest {
     @NotBlank(message = "Comment must not be blank")
     private String comment;
 
-    private String header;
-
-    private String description;
-
     @NotNull(message = "Target ID must not be Null")
     private Long targetId;
 
     @NotNull(message = "User ID must not be Null")
     private Long userId;
+
+    public CommentCreateRequest(Long userId, Long targetId, TargetType targetType, String comment) {
+        this.targetType = targetType;
+        this.comment = comment;
+        this.targetId = targetId;
+        this.userId = userId;
+    }
+
+    private String header;
+
+    private String description;
+
 
     @Override
     public boolean equals(Object o) {

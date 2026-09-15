@@ -22,17 +22,17 @@ public class CommentDto {
     private String header;
     private String description;
     private Long targetId;
-    private Long user_id;
+    private Long userId;
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         CommentDto that = (CommentDto) o;
-        return Objects.equals(id, that.id) && targetType == that.targetType && Objects.equals(comment, that.comment) && Objects.equals(targetId, that.targetId) && Objects.equals(user_id, that.user_id);
+        return Objects.equals(id, that.id) && targetType == that.targetType && Objects.equals(comment, that.comment) && Objects.equals(targetId, that.targetId) && Objects.equals(userId, that.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, targetType, comment, targetId, user_id);
+        return Objects.hash(id, targetType, comment, targetId, userId);
     }
 }

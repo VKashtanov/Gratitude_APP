@@ -21,7 +21,7 @@ public class CommentUpdateRequest {
     @Size(max = 300)
     private String header;
 
-        @Size(max = 500)
+    @Size(max = 500)
     private String description;
 
     @Override

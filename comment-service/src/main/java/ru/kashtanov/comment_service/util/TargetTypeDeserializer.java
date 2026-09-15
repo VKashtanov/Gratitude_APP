@@ -23,6 +23,7 @@ public class TargetTypeDeserializer extends ValueDeserializer<TargetType> {
         }
         try {
             return TargetType.valueOf(value.toUpperCase().trim());
+
         } catch (IllegalArgumentException e) {
             String validValues = Arrays.stream(TargetType.values())
                     .map(Enum::name)

@@ -34,11 +34,9 @@ public class CommentService {
 
     @Transactional
     public CommentDto createComment(CommentCreateRequest dto) {
-        Comment comment = builderService.toComment(dto);
-        Comment saved = commentRepo.save(comment);
+        Comment newComment = builderService.toComment(dto);
+        Comment saved = commentRepo.save(newComment);
         return builderService.toCommentDto(saved);
-
-
     }
 
 
@@ -72,7 +70,7 @@ public class CommentService {
         return formPaginatedComments(
                 cursor,
                 limit,
-                (curs, lim) -> commentRepo.findAllComments(curs, lim));
+                commentRepo::findAllComments);
     }
 
 
