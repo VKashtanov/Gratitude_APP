@@ -21,8 +21,9 @@ public record PaginatedParam(
         @Max(MAX_LIMIT)
         @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT_VALUE)
         Long limit
-) {
-        public static final int MIN_LIMIT = 1;
-        public static final int MAX_LIMIT = 100;
-        public static final String DEFAULT_LIMIT_VALUE = "10";
+)
+{
+    public static final int MIN_LIMIT = 1;
+    public static final int MAX_LIMIT = 100;
+    public static final String DEFAULT_LIMIT_VALUE = "10";
 }
